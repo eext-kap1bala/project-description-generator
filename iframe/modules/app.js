@@ -41,7 +41,7 @@ function $(id) {
 	}
 
 	if (!themes.length) {
-		toast('未加载到任何主题，请检查 themes.json', 'error');
+		toast('未加载到任何主题', 'error');
 	}
 
 	// 3) 主题单选

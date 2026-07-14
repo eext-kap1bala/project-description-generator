@@ -6,7 +6,6 @@
  */
 
 export const STORAGE_KEY = 'pdg:config:v1';
-export const THEME_CACHE_KEY = 'pdg:themes:v1';
 
 export const DEFAULTS = Object.freeze({
 	baseUrl: 'https://api.openai.com/v1',
