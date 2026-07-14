@@ -7,11 +7,12 @@
 	"homepage": "https://pro.lceda.cn/",
 	"scripts": {
 		"compile": "rimraf ./dist/ && ts-node ./config/esbuild.prod.ts",
+		"compile-iframe": "rimraf ./iframe/dist/ && ts-node ./config/esbuild.iframe.ts",
 		"prepare": "husky",
 		"prettier:all": "prettier --write .",
 		"eslint:all": "eslint --ext .ts --fix .",
 		"fix": "npm run prettier:all && npm run eslint:all",
-		"build": "npm run compile && ts-node ./build/packaged.ts"
+		"build": "npm run compile && npm run compile-iframe && ts-node ./build/packaged.ts"
 	},
 	"devDependencies": {
 		"@jlceda/pro-api-types": "^0.1.175",

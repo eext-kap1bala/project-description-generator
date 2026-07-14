@@ -15,6 +15,21 @@ import * as extensionConfig from '../extension.json';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function activate(status?: 'onStartupFinished', arg?: string): void {}
 
+/**
+ * 打开"项目描述生成器"iframe 窗口
+ *
+ * 通过 eda.sys_IFrame.openIFrame 加载 /iframe/index.html。
+ * 路径相对于扩展包根目录，运行时由 EasyEDA 客户端从已安装的扩展中读取。
+ */
+export function openGenerator(): void {
+	eda.sys_IFrame.openIFrame('/iframe/index.html', 960, 720, 'pdg-main', {
+		title: '项目描述生成器',
+		maximizeButton: true,
+		minimizeButton: true,
+		grayscaleMask: true,
+	});
+}
+
 export function about(): void {
 	eda.sys_Dialog.showInformationMessage(
 		eda.sys_I18n.text('EasyEDA extension SDK v', undefined, undefined, extensionConfig.version),

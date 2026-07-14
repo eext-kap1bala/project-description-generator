@@ -1,8 +1,8 @@
 {
-	"name": "pro-api-sdk",
-	"uuid": "",
-	"displayName": "PRO API SDK",
-	"description": "嘉立创EDA & EasyEDA 专业版扩展 API 开发工具",
+	"name": "project-description-generator",
+	"uuid": "93d95aa44be34857a490214b05c63c7f",
+	"displayName": "项目描述生成器",
+	"description": "在 EasyEDA Pro 中使用大语言模型为你的项目生成结构化描述",
 	"version": "1.0.0",
 	"publisher": "卡皮巴拉",
 	"engines": {
@@ -14,7 +14,7 @@
 		"url": "https://ext.lceda.cn/item/moth/"
 	},
 	"categories": "Other",
-	"keywords": ["SDK"],
+	"keywords": ["AI", "Markdown", "Project Description"],
 	"images": {
 		"logo": "./images/logo.png"
 	},
@@ -36,6 +36,17 @@
 						"registerFn": "about"
 					}
 				]
+			},
+			{
+				"id": "ProjectDescriptionGenerator",
+				"title": "项目描述生成器",
+				"menuItems": [
+					{
+						"id": "OpenGenerator",
+						"title": "打开项目描述生成器",
+						"registerFn": "openGenerator"
+					}
+				]
 			}
 		],
 		"sch": [
@@ -49,6 +60,17 @@
 						"registerFn": "about"
 					}
 				]
+			},
+			{
+				"id": "ProjectDescriptionGenerator",
+				"title": "项目描述生成器",
+				"menuItems": [
+					{
+						"id": "OpenGenerator",
+						"title": "打开项目描述生成器",
+						"registerFn": "openGenerator"
+					}
+				]
 			}
 		],
 		"pcb": [
@@ -60,6 +82,17 @@
 						"id": "About",
 						"title": "About...",
 						"registerFn": "about"
+					}
+				]
+			},
+			{
+				"id": "ProjectDescriptionGenerator",
+				"title": "项目描述生成器",
+				"menuItems": [
+					{
+						"id": "OpenGenerator",
+						"title": "打开项目描述生成器",
+						"registerFn": "openGenerator"
 					}
 				]
 			}

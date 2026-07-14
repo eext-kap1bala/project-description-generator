@@ -1,0 +1,90 @@
+/* reset & base */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+body {
+	font-family: var(--font-sans);
+	font-size: var(--text-base);
+	color: var(--ink);
+	background: var(--bg);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+	margin: 0;
+}
+
+button {
+	font: inherit;
+	color: inherit;
+}
+
+input,
+textarea {
+	font: inherit;
+	color: inherit;
+}
+
+a {
+	color: var(--accent);
+	text-underline-offset: 2px;
+}
+
+/* 选区色 */
+::selection {
+	background: var(--accent-soft);
+	color: var(--accent);
+}
+
+/* 自定义滚动条 */
+*::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: var(--border-strong);
+	border-radius: var(--radius-full);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: var(--ink-subtle);
+}
+
+/* 工具类 */
+.muted {
+	color: var(--ink-muted);
+	font-size: var(--text-sm);
+}
+
+.hint {
+	font-size: var(--text-xs);
+}
+
+/* focus 统一外观 */
+:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+	border-radius: var(--radius-sm);
+}
