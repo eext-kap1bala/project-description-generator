@@ -27,17 +27,6 @@
 	"headerMenus": {
 		"home": [
 			{
-				"id": "API SDK",
-				"title": "API SDK",
-				"menuItems": [
-					{
-						"id": "About",
-						"title": "About...",
-						"registerFn": "about"
-					}
-				]
-			},
-			{
 				"id": "ProjectDescriptionGenerator",
 				"title": "项目描述生成器",
 				"menuItems": [
@@ -51,17 +40,6 @@
 		],
 		"sch": [
 			{
-				"id": "API SDK",
-				"title": "API SDK",
-				"menuItems": [
-					{
-						"id": "About",
-						"title": "About...",
-						"registerFn": "about"
-					}
-				]
-			},
-			{
 				"id": "ProjectDescriptionGenerator",
 				"title": "项目描述生成器",
 				"menuItems": [
@@ -74,17 +52,6 @@
 			}
 		],
 		"pcb": [
-			{
-				"id": "API SDK",
-				"title": "API SDK",
-				"menuItems": [
-					{
-						"id": "About",
-						"title": "About...",
-						"registerFn": "about"
-					}
-				]
-			},
 			{
 				"id": "ProjectDescriptionGenerator",
 				"title": "项目描述生成器",
