@@ -19,9 +19,9 @@ import { loadFixedPrompts, loadThemes } from './prompts/themes-loader.js';
 import { generate } from './services/llm/client.js';
 import { loadConfig, saveConfig } from './services/storage.js';
 import { initConfigPanel } from './ui/config-panel.js';
-import { initFixedPromptEditor } from './ui/fixed-prompt-editor.js';
 import { initInputPanel } from './ui/input-panel.js';
 import { initOutputPanel } from './ui/output-panel.js';
+import { openThemeDetail } from './ui/theme-detail-modal.js';
 import { renderThemeSelector } from './ui/theme-selector.js';
 import { toast } from './ui/toast.js';
 
@@ -57,38 +57,44 @@ function $(id) {
 	// 3) 主题单选
 	let activeThemeId = themes.some((t) => t.id === config.lastThemeId) ? config.lastThemeId : themes[0]?.id;
 
-	renderThemeSelector($('theme-bar'), themes, activeThemeId, (id) => {
-		activeThemeId = id;
-		saveConfig({ lastThemeId: id });
-		fixedPromptEditor.refresh(id);
-	});
-
-	// 4) 固定提示词编辑器
-	const fixedPromptEditor = initFixedPromptEditor(
-		fixedPrompts,
-		config.fixedPromptOverrides || {},
-		themes,
-		activeThemeId,
-		(kind, fixedId, value) => {
-			if (kind !== 'edit') return;
-			const next = { ...(config.fixedPromptOverrides || {}) };
-			if (typeof value === 'string' && value.trim()) {
-				const fp = fixedPrompts[fixedId];
-				// 与默认内容完全一致 → 视为未覆盖，删除 key
-				if (fp && value.trim() === fp.content.trim()) {
-					delete next[fixedId];
-				} else {
-					next[fixedId] = value;
-				}
-			} else {
-				delete next[fixedId];
-			}
-			config.fixedPromptOverrides = next;
-			saveConfig({ fixedPromptOverrides: next });
-			fixedPromptEditor.setOverrides(next);
+	renderThemeSelector($('theme-bar'), themes, activeThemeId, {
+		onChange: (id) => {
+			activeThemeId = id;
+			saveConfig({ lastThemeId: id });
 		},
-	);
-	fixedPromptEditor.refresh(activeThemeId);
+		onShowDetail: (theme) => {
+			const fpEntry = fixedPrompts[theme.fixedPromptId];
+			const override = config.fixedPromptOverrides?.[theme.fixedPromptId];
+			const defaultContent = fpEntry?.content || '';
+			const isOverridden = (val) => typeof val === 'string' && val.trim() && val.trim() !== defaultContent.trim();
+
+			openThemeDetail(theme, {
+				fixedPrompt: {
+					id: theme.fixedPromptId,
+					name: fpEntry?.name,
+					content: isOverridden(override) ? override : defaultContent,
+					overridden: isOverridden(override),
+				},
+				onFixedPromptChange: (fixedId, value) => {
+					const next = { ...(config.fixedPromptOverrides || {}) };
+					if (typeof value === 'string' && value.trim()) {
+						const fp = fixedPrompts[fixedId];
+						// 与默认内容完全一致 → 视为未覆盖，删除 key
+						if (fp && value.trim() === fp.content.trim()) {
+							delete next[fixedId];
+						} else {
+							next[fixedId] = value;
+						}
+					} else {
+						delete next[fixedId];
+					}
+					config.fixedPromptOverrides = next;
+					saveConfig({ fixedPromptOverrides: next });
+					return isOverridden(next[fixedId]);
+				},
+			});
+		},
+	});
 
 	// 5) 配置面板
 	const configPanel = initConfigPanel(config, (patch) => {
