@@ -20,6 +20,11 @@ const CLOSE_ICON_SVG = `<svg viewBox="0 0 24 24" width="18" height="18" fill="no
 	<line x1="6" y1="6" x2="18" y2="18"/>
 </svg>`;
 
+const LOCK_ICON_SVG = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+	<rect x="4" y="11" width="16" height="10" rx="2"/>
+	<path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+</svg>`;
+
 const FADE_OUT_MS = 200;
 
 let currentModal = null;
@@ -128,7 +133,7 @@ export function openThemeDetail(theme, opts = {}) {
 
 function makeReadonlySection(label, text) {
 	const section = document.createElement('div');
-	section.className = 'modal__section';
+	section.className = 'modal__section modal__section--readonly';
 
 	const head = document.createElement('div');
 	head.className = 'modal__section-head';
@@ -136,6 +141,12 @@ function makeReadonlySection(label, text) {
 	lbl.className = 'modal__label';
 	lbl.textContent = label;
 	head.appendChild(lbl);
+
+	const badge = document.createElement('span');
+	badge.className = 'modal__readonly-badge';
+	badge.innerHTML = `${LOCK_ICON_SVG}<span>只读</span>`;
+	head.appendChild(badge);
+
 	section.appendChild(head);
 
 	const pre = document.createElement('pre');

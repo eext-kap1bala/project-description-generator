@@ -493,6 +493,42 @@ input::placeholder {
 	overflow-y: auto;
 }
 
+/* ============ 模态框内：只读区块视觉强化 ============ */
+.modal__section--readonly .modal__pre {
+	background: var(--surface);
+	border-left: 3px solid var(--ink-subtle);
+	padding-left: calc(var(--space-3) - 3px);
+	cursor: default;
+	color: var(--ink-muted);
+}
+
+.modal__section--readonly .modal__pre:hover {
+	border-color: var(--border);
+	border-left-color: var(--ink-subtle);
+}
+
+.modal__readonly-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 8px;
+	border: 1px solid var(--border);
+	border-radius: var(--radius-full);
+	font-size: var(--text-xs);
+	color: var(--ink-muted);
+	background: var(--bg);
+	user-select: none;
+}
+
+.modal__readonly-badge svg {
+	display: block;
+	opacity: 0.8;
+	white-space: pre-wrap;
+	word-break: break-word;
+	max-height: 320px;
+	overflow-y: auto;
+}
+
 /* ============ 模态框内：固定提示词编辑区 ============ */
 .modal__field {
 	display: flex;
