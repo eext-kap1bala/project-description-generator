@@ -3,21 +3,23 @@
  *
  * 启动顺序：
  *   1. 加载持久化配置
- *   2. 加载主题（缓存 → fetch → fallback）
+ *   2. 加载主题 + 固定提示词
  *   3. 渲染主题胶囊单选
- *   4. 初始化配置面板
- *   5. 初始化输入面板（绑定字数统计）
- *   6. 初始化输出面板（绑定"复制""重新生成"）
- *   7. 绑定"生成"主按钮：拼接提示词 → 调用 LLM → 渲染结果
+ *   4. 初始化固定提示词编辑器
+ *   5. 初始化配置面板
+ *   6. 初始化输入面板（绑定字数统计）
+ *   7. 初始化输出面板（绑定"复制""重新生成"）
+ *   8. 绑定"生成"主按钮：拼接提示词 → 调用 LLM → 渲染结果
  */
 // 注意：这里使用相对路径 import —— esbuild 在打包时会把所有模块合并到
 // iframe/dist/bundle.js（IIFE 格式），最终以普通 <script> 加载，所以运行时
 // 不会触发浏览器 ES Module 解析（EasyEDA iframe 协议下解析会失败）。
-import { FIXED_SYSTEM_PROMPT } from './prompts/system.js';
-import { loadThemes } from './prompts/themes-loader.js';
+import { buildSystemPrompt } from './prompts/system.js';
+import { loadFixedPrompts, loadThemes } from './prompts/themes-loader.js';
 import { generate } from './services/llm/client.js';
 import { loadConfig, saveConfig } from './services/storage.js';
 import { initConfigPanel } from './ui/config-panel.js';
+import { initFixedPromptEditor } from './ui/fixed-prompt-editor.js';
 import { initInputPanel } from './ui/input-panel.js';
 import { initOutputPanel } from './ui/output-panel.js';
 import { renderThemeSelector } from './ui/theme-selector.js';
@@ -31,13 +33,21 @@ function $(id) {
 	// 1) 配置
 	const config = loadConfig();
 
-	// 2) 主题
+	// 2) 主题 + 固定提示词
 	let themes = [];
+	let fixedPrompts = {};
 	try {
 		themes = await loadThemes();
 	} catch (e) {
 		console.warn('[pdg] loadThemes fatal:', e);
 		themes = [];
+	}
+	try {
+		const arr = await loadFixedPrompts();
+		fixedPrompts = Object.fromEntries(arr.map((fp) => [fp.id, fp]));
+	} catch (e) {
+		console.warn('[pdg] loadFixedPrompts fatal:', e);
+		fixedPrompts = {};
 	}
 
 	if (!themes.length) {
@@ -50,19 +60,47 @@ function $(id) {
 	renderThemeSelector($('theme-bar'), themes, activeThemeId, (id) => {
 		activeThemeId = id;
 		saveConfig({ lastThemeId: id });
+		fixedPromptEditor.refresh(id);
 	});
 
-	// 4) 配置面板
+	// 4) 固定提示词编辑器
+	const fixedPromptEditor = initFixedPromptEditor(
+		fixedPrompts,
+		config.fixedPromptOverrides || {},
+		themes,
+		activeThemeId,
+		(kind, fixedId, value) => {
+			if (kind !== 'edit') return;
+			const next = { ...(config.fixedPromptOverrides || {}) };
+			if (typeof value === 'string' && value.trim()) {
+				const fp = fixedPrompts[fixedId];
+				// 与默认内容完全一致 → 视为未覆盖，删除 key
+				if (fp && value.trim() === fp.content.trim()) {
+					delete next[fixedId];
+				} else {
+					next[fixedId] = value;
+				}
+			} else {
+				delete next[fixedId];
+			}
+			config.fixedPromptOverrides = next;
+			saveConfig({ fixedPromptOverrides: next });
+			fixedPromptEditor.setOverrides(next);
+		},
+	);
+	fixedPromptEditor.refresh(activeThemeId);
+
+	// 5) 配置面板
 	const configPanel = initConfigPanel(config, (patch) => {
 		saveConfig(patch);
 	});
 
-	// 5) 输入面板
+	// 6) 输入面板
 	const input = initInputPanel('user-input', 'char-count', {
 		onSubmit: runGenerate,
 	});
 
-	// 6) 输出面板
+	// 7) 输出面板
 	const output = initOutputPanel({
 		preId: 'output',
 		statusId: 'result-status',
@@ -72,7 +110,7 @@ function $(id) {
 	output.onCopy(() => toast('已复制', 'success'));
 	output.setRegenHandler(runGenerate);
 
-	// 7) 主按钮
+	// 8) 主按钮
 	$('btn-generate').addEventListener('click', runGenerate);
 
 	async function runGenerate() {
@@ -102,7 +140,7 @@ function $(id) {
 			return;
 		}
 
-		const systemPrompt = `${FIXED_SYSTEM_PROMPT}\n\n---\n\n${theme.prompt}`;
+		const systemPrompt = buildSystemPrompt(theme, fixedPrompts, config.fixedPromptOverrides);
 
 		output.setLoading();
 		$('btn-generate').disabled = true;
