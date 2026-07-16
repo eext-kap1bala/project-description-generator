@@ -10,66 +10,103 @@
 		<link rel="stylesheet" href="/iframe/styles/components.css" />
 	</head>
 	<body>
-		<header class="topbar">
-			<div class="topbar__brand">
-				<h1 class="brand">项目描述生成器</h1>
-				<p class="brand__sub">用大语言模型为你的项目生成结构化描述</p>
-			</div>
-			<div id="theme-bar" class="theme-bar" role="radiogroup" aria-label="主题"></div>
+		<header class="masthead">
+			<h1 class="masthead__title">项目描述生成器</h1>
 		</header>
 
-		<main class="workspace">
-			<section class="pane">
-				<div class="pane__head">
-					<span class="pane__title">原始内容</span>
-					<span id="char-count" class="muted">0 字</span>
-				</div>
-				<textarea id="user-input" class="textarea" placeholder="粘贴或输入未排版的项目描述…" spellcheck="false" autocomplete="off"></textarea>
-				<div class="pane__foot pane__foot--end">
-					<button id="btn-generate" class="btn btn--primary">生成</button>
+		<main class="flow">
+			<!-- ① 配置 API -->
+			<section class="step step--api" id="step-api" data-step="1">
+				<header class="step__head">
+					<span class="step__index" aria-hidden="true">01</span>
+					<div class="step__title-group">
+						<h2 class="step__title">配置 API</h2>
+						<p class="step__sub">填写 Base URL、模型与 API Key，可选测试连接</p>
+					</div>
+					<span id="cfg-summary" class="step__status">未配置</span>
+				</header>
+				<div class="step__body">
+					<div class="config-grid">
+						<label class="field">
+							<span class="field__label">Base URL</span>
+							<input id="cfg-base" type="url" autocomplete="off" spellcheck="false" placeholder="https://api.openai.com/v1" />
+						</label>
+						<label class="field">
+							<span class="field__label">模型</span>
+							<input id="cfg-model" type="text" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" />
+						</label>
+						<label class="field">
+							<span class="field__label">API Key</span>
+							<input id="cfg-key" type="password" autocomplete="off" placeholder="sk-…" />
+						</label>
+						<div class="field field--action">
+							<span class="field__label">检查</span>
+							<div class="field__action-row">
+								<button id="btn-test" class="btn btn--ghost">测试连接</button>
+								<span id="cfg-status" class="badge" data-state="idle">未测试</span>
+							</div>
+						</div>
+					</div>
+					<p class="step__hint">若遇 CORS 错误，请使用支持浏览器请求的服务或自建代理。</p>
 				</div>
 			</section>
 
-			<section class="pane">
-				<div class="pane__head">
-					<span class="pane__title">结果</span>
-					<span id="result-status" class="muted">尚未生成</span>
+			<!-- ② 选择主题 -->
+			<section class="step step--theme" id="step-theme" data-step="2">
+				<header class="step__head">
+					<span class="step__index" aria-hidden="true">02</span>
+					<div class="step__title-group">
+						<h2 class="step__title">选择主题</h2>
+						<p class="step__sub">决定生成的描述风格与结构</p>
+					</div>
+				</header>
+				<div class="step__body">
+					<div id="theme-bar" class="theme-bar theme-bar--inline" role="radiogroup" aria-label="主题"></div>
 				</div>
-				<pre id="output" class="output" aria-live="polite">等待生成…</pre>
-				<div class="pane__foot pane__foot--end">
-					<button id="btn-regenerate" class="btn" disabled>重新生成</button>
-					<button id="btn-copy" class="btn" disabled>复制</button>
+			</section>
+
+			<!-- ③ 生成项目描述 -->
+			<section class="step step--generate" id="step-generate" data-step="3">
+				<header class="step__head">
+					<span class="step__index" aria-hidden="true">03</span>
+					<div class="step__title-group">
+						<h2 class="step__title">生成项目描述</h2>
+						<p class="step__sub">粘贴未排版文本，Ctrl/⌘+Enter 触发</p>
+					</div>
+					<span id="result-status" class="step__status">尚未生成</span>
+				</header>
+				<div class="step__body">
+					<div class="step__split">
+						<section class="pane pane--input">
+							<div class="pane__head">
+								<span class="pane__title">原始内容</span>
+								<span id="char-count" class="muted">0 字</span>
+							</div>
+							<textarea
+								id="user-input"
+								class="textarea"
+								placeholder="粘贴或输入未排版的项目描述…"
+								spellcheck="false"
+								autocomplete="off"
+							></textarea>
+							<div class="pane__foot pane__foot--end">
+								<button id="btn-generate" class="btn btn--primary">生成</button>
+							</div>
+						</section>
+						<section class="pane pane--output">
+							<div class="pane__head">
+								<span class="pane__title">结果</span>
+							</div>
+							<pre id="output" class="output" aria-live="polite">等待生成…</pre>
+							<div class="pane__foot pane__foot--end">
+								<button id="btn-regenerate" class="btn" disabled>重新生成</button>
+								<button id="btn-copy" class="btn" disabled>复制</button>
+							</div>
+						</section>
+					</div>
 				</div>
 			</section>
 		</main>
-
-		<details class="config-panel">
-			<summary>
-				<span class="config-panel__title">API 设置</span>
-				<span id="cfg-summary" class="muted">未配置</span>
-			</summary>
-			<div class="config-panel__body">
-				<div class="config-grid">
-					<label class="field">
-						<span class="field__label">Base URL</span>
-						<input id="cfg-base" type="url" autocomplete="off" spellcheck="false" placeholder="https://api.openai.com/v1" />
-					</label>
-					<label class="field">
-						<span class="field__label">模型</span>
-						<input id="cfg-model" type="text" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" />
-					</label>
-					<label class="field field--span-2">
-						<span class="field__label">API Key</span>
-						<input id="cfg-key" type="password" autocomplete="off" placeholder="sk-…" />
-					</label>
-				</div>
-				<div class="config-foot">
-					<button id="btn-test" class="btn btn--ghost">测试连接</button>
-					<span id="cfg-status" class="badge" data-state="idle">未测试</span>
-					<span class="muted hint">若遇 CORS 错误，请使用支持浏览器请求的服务或自建代理。</span>
-				</div>
-			</div>
-		</details>
 
 		<div id="toast-host" class="toast-host" aria-live="polite"></div>
 

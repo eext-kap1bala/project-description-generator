@@ -79,8 +79,13 @@ function $(id) {
 		// 每次重新从输入框读取最新配置（用户在折叠面板里改过未提交也可能）
 		const latest = configPanel.getConfig();
 		if (!latest.baseUrl || !latest.apiKey || !latest.model) {
-			toast('请先在 API 设置中填写完整信息', 'error');
-			document.querySelector('.config-panel')?.setAttribute('open', '');
+			toast('请先在「① 配置 API」中填写完整信息', 'error');
+			const apiStep = document.querySelector('.step--api');
+			if (apiStep) {
+				apiStep.classList.add('is-attention');
+				apiStep.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				setTimeout(() => apiStep.classList.remove('is-attention'), 1500);
+			}
 			return;
 		}
 

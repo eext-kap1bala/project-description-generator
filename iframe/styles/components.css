@@ -292,3 +292,9 @@ input::placeholder {
 		transition-duration: 0ms !important;
 	}
 }
+
+/* ============ 主题胶囊条：step ② 行内铺开 ============ */
+.theme-bar--inline {
+	max-width: 100%;
+	justify-content: flex-start;
+}

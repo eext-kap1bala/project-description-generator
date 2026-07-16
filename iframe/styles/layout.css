@@ -1,79 +1,166 @@
 /* 顶层布局 */
 
 body {
-	display: grid;
-	grid-template-rows: auto 1fr auto;
+	display: flex;
+	flex-direction: column;
 	min-height: 100%;
 	padding: var(--space-5);
-	gap: var(--space-4);
+	gap: var(--space-5);
 	background: var(--bg);
 }
 
-/* 顶栏 */
-.topbar {
+/* 品牌薄条 */
+.masthead {
 	display: flex;
-	align-items: flex-start;
-	justify-content: space-between;
-	gap: var(--space-5);
-	padding-bottom: var(--space-3);
-	border-bottom: 1px solid var(--border);
+	align-items: baseline;
+	gap: var(--space-3);
+	padding: 0 0 var(--space-2);
 }
 
-.topbar__brand {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-1);
-}
-
-.brand {
-	font-size: var(--text-xl);
+.masthead__title {
+	font-size: var(--text-lg);
 	font-weight: 600;
 	color: var(--ink);
 	letter-spacing: -0.01em;
 }
 
-.brand__sub {
+/* 主流程容器 */
+.flow {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-5);
+	min-height: 0;
+}
+
+/* ============ Step 通用 ============ */
+.step {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-lg);
+	padding: var(--space-5);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-4);
+	transition:
+		border-color var(--transition),
+		box-shadow var(--transition);
+}
+
+/* 高亮态：API 未配时点击「生成」触发 */
+.step.is-attention {
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* ============ Step head ============ */
+.step__head {
+	display: grid;
+	grid-template-columns: auto 1fr auto;
+	align-items: start;
+	gap: var(--space-4);
+}
+
+.step__index {
+	font-family: var(--font-mono);
+	font-size: 36px;
+	font-weight: 500;
+	line-height: 1;
+	color: var(--ink-subtle);
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.04em;
+	min-width: 1.8em;
+}
+
+.step__title-group {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	padding-top: 4px;
+	min-width: 0;
+}
+
+.step__title {
+	font-size: var(--text-lg);
+	font-weight: 600;
+	color: var(--ink);
+}
+
+.step__sub {
 	font-size: var(--text-sm);
 	color: var(--ink-muted);
 }
 
-/* 主题胶囊条 */
-.theme-bar {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--space-2);
-	max-width: 60%;
-	justify-content: flex-end;
+.step__status {
+	font-size: var(--text-sm);
+	color: var(--ink-muted);
+	padding-top: 6px;
+	white-space: nowrap;
 }
 
-/* 工作区（双栏） */
-.workspace {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
+/* ============ Step body & hint ============ */
+.step__body {
+	display: flex;
+	flex-direction: column;
 	gap: var(--space-4);
 	min-height: 0;
 }
 
+.step__hint {
+	font-size: var(--text-xs);
+	color: var(--ink-subtle);
+}
+
+/* ============ 配置网格 ============ */
+.config-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--space-3);
+}
+
 @media (max-width: 760px) {
-	.workspace {
+	.config-grid {
 		grid-template-columns: 1fr;
-	}
-	.theme-bar {
-		max-width: 100%;
-		justify-content: flex-start;
 	}
 }
 
-/* 面板卡片 */
+/* ============ 字段 ============ */
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	min-width: 0;
+}
+
+.field--action {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	min-width: 0;
+}
+
+.field--action .field__action-row {
+	display: flex;
+	align-items: center;
+	gap: var(--space-2);
+	flex-wrap: wrap;
+}
+
+.field__label {
+	font-size: var(--text-sm);
+	color: var(--ink-muted);
+}
+
+/* ============ 面板卡片（step ③ 内部沿用） ============ */
 .pane {
 	display: grid;
 	grid-template-rows: auto 1fr auto;
 	gap: var(--space-3);
-	background: var(--surface);
+	background: var(--bg);
 	border: 1px solid var(--border);
-	border-radius: var(--radius-lg);
-	padding: var(--space-4);
+	border-radius: var(--radius);
+	padding: var(--space-3);
 	min-height: 320px;
+	min-width: 0;
 }
 
 .pane__head {
@@ -98,87 +185,19 @@ body {
 	justify-content: flex-end;
 }
 
-/* 配置面板（折叠） */
-.config-panel {
-	background: var(--surface);
-	border: 1px solid var(--border);
-	border-radius: var(--radius-lg);
-	overflow: hidden;
-	transition: border-color var(--transition);
-}
-
-.config-panel[open] {
-	border-color: var(--border-strong);
-}
-
-.config-panel > summary {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: var(--space-3) var(--space-4);
-	cursor: pointer;
-	list-style: none;
-	user-select: none;
-	transition: background var(--transition-fast);
-}
-
-.config-panel > summary::-webkit-details-marker {
-	display: none;
-}
-
-.config-panel > summary:hover {
-	background: var(--surface-hover);
-}
-
-.config-panel__title {
-	font-size: var(--text-md);
-	font-weight: 600;
-}
-
-.config-panel__body {
-	padding: var(--space-4);
-	padding-top: 0;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-4);
-}
-
-.config-grid {
+/* ============ Step ③ 内部双栏 ============ */
+.step__split {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: var(--space-3);
+	gap: var(--space-4);
+	min-height: 0;
 }
 
 @media (max-width: 760px) {
+	.step__split {
+		grid-template-columns: 1fr;
+	}
 	.config-grid {
 		grid-template-columns: 1fr;
 	}
-}
-
-.field {
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-1);
-}
-
-.field--span-2 {
-	grid-column: span 2;
-}
-
-@media (max-width: 760px) {
-	.field--span-2 {
-		grid-column: span 1;
-	}
-}
-
-.field__label {
-	font-size: var(--text-sm);
-	color: var(--ink-muted);
-}
-
-.config-foot {
-	display: flex;
-	align-items: center;
-	gap: var(--space-3);
-	flex-wrap: wrap;
 }
