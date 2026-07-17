@@ -17,6 +17,7 @@
 import { buildSystemPrompt } from './prompts/system.js';
 import { loadFixedPrompts, loadThemes } from './prompts/themes-loader.js';
 import { generate } from './services/llm/client.js';
+import { PROVIDERS } from './services/providers-data.js';
 import { loadConfig, saveConfig } from './services/storage.js';
 import { initConfigPanel } from './ui/config-panel.js';
 import { initInputPanel } from './ui/input-panel.js';
@@ -97,7 +98,7 @@ function $(id) {
 	});
 
 	// 5) 配置面板
-	const configPanel = initConfigPanel(config, (patch) => {
+	const configPanel = initConfigPanel(config, PROVIDERS, (patch) => {
 		saveConfig(patch);
 	});
 

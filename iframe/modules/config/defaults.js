@@ -13,6 +13,7 @@ export const DEFAULTS = Object.freeze({
 	model: 'gpt-4o-mini',
 	lastThemeId: 'general',
 	fixedPromptOverrides: {}, // { [fixedPromptId]: string }
+	lastProviderId: 'deepseek', // 当前选中的 API 服务商预设 id
 });
 
 /**
@@ -37,5 +38,6 @@ export function mergeWithDefaults(stored) {
 		model: typeof stored.model === 'string' ? stored.model : DEFAULTS.model,
 		lastThemeId: typeof stored.lastThemeId === 'string' ? stored.lastThemeId : DEFAULTS.lastThemeId,
 		fixedPromptOverrides,
+		lastProviderId: typeof stored.lastProviderId === 'string' ? stored.lastProviderId : DEFAULTS.lastProviderId,
 	};
 }
