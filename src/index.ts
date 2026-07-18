@@ -22,7 +22,7 @@ export function activate(status?: 'onStartupFinished', arg?: string): void {}
  * 路径相对于扩展包根目录，运行时由 EasyEDA 客户端从已安装的扩展中读取。
  */
 export function openGenerator(): void {
-	eda.sys_IFrame.openIFrame('/iframe/index.html', 960, 720, 'pdg-main', {
+	eda.sys_IFrame.openIFrame('/iframe/index.html', 1280, 800, 'pdg-main', {
 		maximizeButton: true,
 		minimizeButton: true,
 		grayscaleMask: true,
