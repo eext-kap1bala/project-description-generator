@@ -16,11 +16,13 @@ body {
 body {
 	font-family: var(--font-sans);
 	font-size: var(--text-base);
-	color: var(--ink);
-	background: var(--bg);
+	font-weight: var(--weight-medium);
+	color: var(--foreground);
+	background: var(--background);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	line-height: 1.5;
+	letter-spacing: var(--tracking-tight);
 }
 
 h1,
@@ -43,50 +45,58 @@ textarea {
 }
 
 a {
-	color: var(--accent);
-	text-underline-offset: 2px;
+	color: var(--primary-blue);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 2px;
+	transition: color var(--transition);
+}
+a:hover {
+	color: var(--primary-red);
 }
 
-/* 选区色 */
+/* 选区色：黄色 + 黑字 */
 ::selection {
-	background: var(--accent-soft);
-	color: var(--accent);
+	background: var(--primary-yellow);
+	color: var(--foreground);
 }
 
 /* 自定义滚动条 */
 *::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	width: 10px;
+	height: 10px;
 }
 
 *::-webkit-scrollbar-track {
-	background: transparent;
+	background: var(--muted);
 }
 
 *::-webkit-scrollbar-thumb {
-	background: var(--border-strong);
-	border-radius: var(--radius-full);
+	background: var(--foreground);
+	border: 2px solid var(--muted);
 }
 
 *::-webkit-scrollbar-thumb:hover {
-	background: var(--ink-subtle);
+	background: var(--primary-red);
 }
 
 /* 工具类 */
 .muted {
-	color: var(--ink-muted);
+	color: var(--muted-foreground);
 	font-size: var(--text-sm);
+	opacity: 0.7;
 }
 
 .hint {
 	font-size: var(--text-xs);
+	color: var(--muted-foreground);
+	opacity: 0.7;
 }
 
-/* focus 统一外观 */
+/* focus 2px black 偏移（无柔光 ring） */
 :focus-visible {
-	outline: 2px solid var(--accent);
+	outline: 2px solid var(--foreground);
 	outline-offset: 2px;
-	border-radius: var(--radius-sm);
 }
 
 /* 统一减少动效偏好：尊重系统设置 */
