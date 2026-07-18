@@ -32,7 +32,7 @@ body {
 .flow {
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-6);
+	gap: var(--space-7);
 	min-height: 0;
 }
 
@@ -46,14 +46,6 @@ body {
 	flex-direction: column;
 	gap: var(--space-5);
 	box-shadow: var(--shadow-xl);
-	transition:
-		transform var(--transition),
-		box-shadow var(--transition);
-}
-
-.step:hover {
-	transform: translate(-2px, -2px);
-	box-shadow: 10px 10px 0 0 var(--foreground);
 }
 
 /* 高亮态：API 未配时点击「生成」触发 */
