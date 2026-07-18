@@ -53,7 +53,7 @@ export const FIXED_PROMPTS = [
 1. 编辑器支持html与markdown格式的混排，但html与markdown间应该有一行的空行
 2. 根据所要应用的编辑器的特点，输出的代码不包含缩进，所有代码都要顶格排版，且保留标签间的换行
 3. 禁止使用html的 < h1 > /<h2>/ < h3 > 等h标签作为项目标题
-4. 编辑器不支持 < html > / < style > 等标签，不支持html注释块，不支持JavaScript，你只能输出Body内的内容
+4. 编辑器不支持 < html > / < style > 等标签，不支持html注释块、绝对/相对布局/负偏移、JavaScript，你只能输出Body内的内容
 5. 在排版结束后，你应该重新检查排版结果，确保不违反上面的规则后再输出内容
 6. ★ 严格禁止在 HTML 标签内部插入换行或多余空格：例如 <p style="color: red; font-size: 14px"> 必须保持单行紧凑，禁止写成多行（每个 CSS 属性独占一行）。style 属性值内禁止任何换行；多个 HTML 标签之间可以保留换行`,
 	},
