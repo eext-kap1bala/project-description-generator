@@ -24,6 +24,21 @@ const THINK_OPEN_LEN = THINK_OPEN.length; // 6
 const THINK_CLOSE_LEN = THINK_CLOSE.length; // 7
 
 /**
+ * 格式化思考耗时（毫秒 → 文本）。
+ *  - < 60s：保留 1 位小数，如 "3.2s"
+ *  - >= 60s：分 + 秒（秒取整），如 "1m 23s"
+ */
+function formatThinkDuration(ms) {
+	const totalSec = ms / 1000;
+	if (totalSec < 60) {
+		return `${totalSec.toFixed(1)}s`;
+	}
+	const m = Math.floor(totalSec / 60);
+	const s = Math.floor(totalSec % 60);
+	return `${m}m ${s}s`;
+}
+
+/**
  * 压缩单个 HTML 标签内的空白（保留 < 和 >，去掉紧贴它们的空白，中部连续空白压成单空格）。
  * - 引号字符串（单/双）内的空白原样保留，避免破坏 class="nav primary" 这类场景
  * - 处理空白字符：\s = 空格 / 制表符 / 换行 / 回车
@@ -86,15 +101,67 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 	let pendingTag = ''; // OUT 状态下跨 chunk 的未闭合 HTML 标签起始（<... 等待 >）
 	let currentThinkBody = null; // 当前 think 块的 body 节点（null 表示 OUT）
 
+	// 思考计时
+	let thinkStartTime = null; // 当前 think 段开始 performance.now() 毫秒
+	let thinkTimer = null; // setInterval 句柄
+	let currentThinkSummary = null; // 当前 think 段 summary 按钮引用
+	let currentThinkAborted = false; // 当前 think 段是否被中断（finishStreaming / setError 兜底触发）
+
+	// 占位文本「生成中…」的引用，便于收到首个真实 chunk 时立即移除
+	let loadingSpan = null;
+
 	function clearContainer() {
 		while (container.firstChild) container.removeChild(container.firstChild);
 		currentThinkBody = null;
+		loadingSpan = null; // ★ 防止指向已 remove 的旧节点
+		// 清理思考计时（防止泄漏到下一次生成）
+		if (thinkTimer) {
+			clearInterval(thinkTimer);
+			thinkTimer = null;
+		}
+		thinkStartTime = null;
+		currentThinkSummary = null;
+		currentThinkAborted = false;
 	}
 
 	function updateStatus() {
 		if (streaming) {
 			status.textContent = `生成中 · ${lastText.length.toLocaleString()} 字`;
 		}
+	}
+
+	// ========== 思考计时 ==========
+	function updateThinkLabel() {
+		if (!thinkStartTime || !currentThinkSummary) return;
+		const ms = performance.now() - thinkStartTime;
+		const suffix = currentThinkAborted ? ' · 已中断' : '';
+		currentThinkSummary.textContent = `思考中... (${formatThinkDuration(ms)})${suffix}`;
+	}
+
+	function startThinkTimer(summaryBtn) {
+		// 清理可能存在的旧 timer（防御性，正常流程下不会触发）
+		if (thinkTimer) {
+			clearInterval(thinkTimer);
+			thinkTimer = null;
+		}
+		thinkStartTime = performance.now();
+		currentThinkSummary = summaryBtn;
+		currentThinkAborted = false;
+		updateThinkLabel();
+		thinkTimer = setInterval(updateThinkLabel, 200);
+	}
+
+	function stopThinkTimer(aborted) {
+		if (thinkTimer) {
+			clearInterval(thinkTimer);
+			thinkTimer = null;
+		}
+		if (thinkStartTime && currentThinkSummary) {
+			currentThinkAborted = !!aborted;
+			updateThinkLabel(); // 最终一次更新（确保最后一帧到位）
+		}
+		thinkStartTime = null;
+		currentThinkSummary = null;
 	}
 
 	function flushPendingText(s) {
@@ -139,7 +206,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 			btn.className = 'output__think-summary';
 			btn.type = 'button';
 			btn.setAttribute('aria-expanded', 'false');
-			btn.textContent = '思考过程';
+			btn.textContent = '思考中...';
 			btn.addEventListener('click', () => {
 				const open = block.classList.toggle('is-open');
 				btn.setAttribute('aria-expanded', String(open));
@@ -149,6 +216,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 			block.append(btn, body);
 			container.appendChild(block);
 			currentThinkBody = body;
+			// ★ 启动思考计时
+			startThinkTimer(btn);
 		}
 		if (s) currentThinkBody.textContent += s;
 	}
@@ -198,6 +267,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 				}
 				flushPendingThink(pending.slice(0, idx));
 				pending = pending.slice(idx + THINK_CLOSE_LEN);
+				// ★ 思考段正常结束：停止计时（不标中断）
+				stopThinkTimer(false);
 				state = 'OUT';
 			}
 		}
@@ -212,10 +283,10 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		lastText = '';
 		streaming = true;
 		// 占位文本（避免空白闪烁）
-		const span = document.createElement('span');
-		span.className = 'output__text';
-		span.textContent = '生成中…';
-		container.appendChild(span);
+		loadingSpan = document.createElement('span');
+		loadingSpan.className = 'output__text';
+		loadingSpan.textContent = '生成中…';
+		container.appendChild(loadingSpan);
 		container.classList.add('is-loading');
 		container.classList.remove('is-error');
 		status.textContent = '生成中';
@@ -230,10 +301,19 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 			streaming = true;
 		}
 		container.classList.remove('is-loading');
+		// ★ 收到首个真实 chunk（OUT 或 IN_THINK）即删「生成中…」占位
+		if (loadingSpan) {
+			loadingSpan.remove();
+			loadingSpan = null;
+		}
 		processChunk(chunk);
 	}
 
 	function finishStreaming() {
+		// 兜底：流结束若仍在 IN_THINK 状态（没收到 </think>），标记中断
+		if (state === 'IN_THINK') {
+			stopThinkTimer(true);
+		}
 		// 兜底：把流末尾残留的未闭合 HTML 标签起始原样追加（避免半截标签丢失）
 		if (pendingTag) {
 			lastText += pendingTag;
@@ -268,6 +348,13 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 	}
 
 	function setError(msg) {
+		// 兜底清理「生成中…」占位（若 setLoading 后没收到任何 chunk 就报错）
+		if (loadingSpan) {
+			loadingSpan.remove();
+			loadingSpan = null;
+		}
+		// 兜底：流中断时若还在 IN_THINK，标中断；否则安全 no-op
+		stopThinkTimer(state === 'IN_THINK');
 		streaming = false;
 		// 流式中断时保留已渲染内容，状态栏标记失败
 		container.classList.add('is-error');
