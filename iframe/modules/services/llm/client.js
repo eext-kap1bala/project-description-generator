@@ -8,7 +8,7 @@
  */
 
 const TEST_TIMEOUT_MS = 15000;
-const GENERATE_TIMEOUT_MS = 60000;
+const GENERATE_TIMEOUT_MS = 180000;
 
 /**
  * 拼接 base URL 与端点路径，剥去尾部斜杠。
