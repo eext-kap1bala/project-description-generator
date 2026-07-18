@@ -1,56 +1,286 @@
 /**
  * 输出面板交互
  *
- * 纯文本展示 —— 不做任何 Markdown 渲染（XSS 风险归零）。
- * - <pre> 块保留换行 + 自动换行
- * - 等宽字体
- * - 状态：loading / done / error 三态
+ * 流式展示 —— 不做任何 Markdown 渲染（XSS 风险归零）。
+ * - 容器为 <div>，内含两类子节点：
+ *     <span class="output__text">    普通 OUT 段（流式累加 / 复制源）
+ *     <div class="output__think">    think 折叠块（不进入复制源）
+ * - 等宽字体 + white-space: pre-wrap 由 .output 类承载
+ * - 状态：loading / streaming / done / error 四态
  * - "复制" 优先用 navigator.clipboard.writeText，
  *   旧环境下退化为文本选中
+ *
+ * 关键不变量：lastText（复制源）只追加 OUT 状态的纯文本，
+ * think 段与 <think> / </think> 标签本身完全不入 lastText。
  */
 
 function $(id) {
 	return document.getElementById(id);
 }
 
+const THINK_OPEN = '<think';
+const THINK_CLOSE = '</think>';
+const THINK_OPEN_LEN = THINK_OPEN.length; // 6
+const THINK_CLOSE_LEN = THINK_CLOSE.length; // 7
+
+/**
+ * 压缩单个 HTML 标签内的空白（保留 < 和 >，去掉紧贴它们的空白，中部连续空白压成单空格）。
+ * - 引号字符串（单/双）内的空白原样保留，避免破坏 class="nav primary" 这类场景
+ * - 处理空白字符：\s = 空格 / 制表符 / 换行 / 回车
+ *
+ * 例：'<p style="color:\n   red;  font-size: 14px">'  →  '<p style="color: red; font-size: 14px">'
+ *     '< p   style="red">'                                →  '<p style="red">'
+ */
+function normalizeTagWhitespace(tagContent) {
+	const inner = tagContent.slice(1, -1);
+	let out = '';
+	let inStr = false;
+	let strCh = '';
+	for (let i = 0; i < inner.length; i++) {
+		const ch = inner[i];
+		if (inStr) {
+			out += ch;
+			if (ch === strCh) inStr = false;
+		} else if (ch === '"' || ch === "'") {
+			inStr = true;
+			strCh = ch;
+			out += ch;
+		} else if (/\s/.test(ch)) {
+			if (out.length > 0 && !out.endsWith(' ')) out += ' ';
+		} else {
+			out += ch;
+		}
+	}
+	// 去掉末尾可能残留的空格（> 紧贴之前不应有空格）
+	while (out.endsWith(' ')) out = out.slice(0, -1);
+	return '<' + out + '>';
+}
+
 /**
  * @param {Object} refs  { preId, statusId, copyBtnId, regenBtnId }
- * @returns {{ setLoading, setResult, setError, onCopy, getLastText, setRegenHandler }}
+ * @returns {{
+ *   setLoading: () => void,
+ *   appendChunk: (chunk: string) => void,
+ *   finishStreaming: () => void,
+ *   setResult: (text: string) => void,
+ *   setError: (msg: string) => void,
+ *   onCopy: (cb: () => void) => void,
+ *   setRegenHandler: (fn: () => void) => void,
+ *   getLastText: () => string
+ * }}
  */
 export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
-	const pre = $(preId);
+	const container = $(preId); // 注意：HTML 上 id="output"，是 <div>
 	const status = $(statusId);
 	const copyBtn = $(copyBtnId);
 	const regenBtn = $(regenBtnId);
 
-	let lastText = '';
+	// ========== 状态机 / 渲染 ==========
+	let lastText = ''; // ★ 复制源（已剔除 think）
 	let copyCb = null;
+	let streaming = false; // 流式进行中
 
+	// 状态机状态
+	let state = 'OUT'; // 'OUT' | 'IN_THINK'
+	let pending = ''; // 跨 chunk 累积 buffer（think 标签切分用）
+	let pendingTag = ''; // OUT 状态下跨 chunk 的未闭合 HTML 标签起始（<... 等待 >）
+	let currentThinkBody = null; // 当前 think 块的 body 节点（null 表示 OUT）
+
+	function clearContainer() {
+		while (container.firstChild) container.removeChild(container.firstChild);
+		currentThinkBody = null;
+	}
+
+	function updateStatus() {
+		if (streaming) {
+			status.textContent = `生成中 · ${lastText.length.toLocaleString()} 字`;
+		}
+	}
+
+	function flushPendingText(s) {
+		if (!s) return;
+		// 拼接跨 chunk 残留的未闭合 HTML 标签起始
+		const full = pendingTag + s;
+		pendingTag = '';
+
+		// 扫描：每个 <...> 区间内的空白归一化；未闭合的 <... 留到下次
+		let out = '';
+		let i = 0;
+		while (i < full.length) {
+			if (full[i] === '<') {
+				const end = full.indexOf('>', i);
+				if (end === -1) {
+					pendingTag = full.slice(i);
+					break;
+				}
+				out += normalizeTagWhitespace(full.slice(i, end + 1));
+				i = end + 1;
+			} else {
+				out += full[i];
+				i++;
+			}
+		}
+
+		if (!out) return;
+		lastText += out;
+		const span = document.createElement('span');
+		span.className = 'output__text';
+		span.textContent = out;
+		container.appendChild(span);
+		updateStatus();
+	}
+
+	function flushPendingThink(s) {
+		if (!s && !currentThinkBody) return;
+		if (!currentThinkBody) {
+			const block = document.createElement('div');
+			block.className = 'output__think';
+			const btn = document.createElement('button');
+			btn.className = 'output__think-summary';
+			btn.type = 'button';
+			btn.setAttribute('aria-expanded', 'false');
+			btn.textContent = '思考过程';
+			btn.addEventListener('click', () => {
+				const open = block.classList.toggle('is-open');
+				btn.setAttribute('aria-expanded', String(open));
+			});
+			const body = document.createElement('div');
+			body.className = 'output__think-body';
+			block.append(btn, body);
+			container.appendChild(block);
+			currentThinkBody = body;
+		}
+		if (s) currentThinkBody.textContent += s;
+	}
+
+	/**
+	 * 状态机主入口：每 chunk 调用一次。
+	 * 容错策略：当 pending 末尾可能是半个 tag（如 "<thi"）时，
+	 * 把"疑似半截"之前的部分推进渲染，剩余部分留到下次 chunk。
+	 */
+	function processChunk(chunk) {
+		pending += chunk;
+		while (true) {
+			if (state === 'OUT') {
+				const lower = pending.toLowerCase();
+				const idx = lower.indexOf(THINK_OPEN);
+				if (idx === -1) {
+					// 检查末尾是否有"未完成的 <tag 前缀"
+					const lastLt = pending.lastIndexOf('<');
+					if (lastLt >= 0 && pending.length - lastLt < THINK_OPEN_LEN) {
+						flushPendingText(pending.slice(0, lastLt));
+						pending = pending.slice(lastLt);
+					} else {
+						flushPendingText(pending);
+						pending = '';
+					}
+					return;
+				}
+				flushPendingText(pending.slice(0, idx));
+				pending = pending.slice(idx + THINK_OPEN_LEN);
+				// 跨入 THINK：清空 OUT 状态的未闭合标签，避免跨状态残留
+				pendingTag = '';
+				state = 'IN_THINK';
+			} else {
+				// IN_THINK
+				const lower = pending.toLowerCase();
+				const idx = lower.indexOf(THINK_CLOSE);
+				if (idx === -1) {
+					const lastLt = pending.lastIndexOf('<');
+					if (lastLt >= 0 && pending.length - lastLt < THINK_CLOSE_LEN) {
+						flushPendingThink(pending.slice(0, lastLt));
+						pending = pending.slice(lastLt);
+					} else {
+						flushPendingThink(pending);
+						pending = '';
+					}
+					return;
+				}
+				flushPendingThink(pending.slice(0, idx));
+				pending = pending.slice(idx + THINK_CLOSE_LEN);
+				state = 'OUT';
+			}
+		}
+	}
+
+	// ========== 对外接口 ==========
 	function setLoading() {
-		pre.textContent = '生成中…';
-		pre.classList.add('is-loading');
-		pre.classList.remove('is-error');
+		clearContainer();
+		state = 'OUT';
+		pending = '';
+		pendingTag = '';
+		lastText = '';
+		streaming = true;
+		// 占位文本（避免空白闪烁）
+		const span = document.createElement('span');
+		span.className = 'output__text';
+		span.textContent = '生成中…';
+		container.appendChild(span);
+		container.classList.add('is-loading');
+		container.classList.remove('is-error');
 		status.textContent = '生成中';
 		copyBtn.disabled = true;
 		regenBtn.disabled = true;
 	}
 
-	function setResult(text) {
-		lastText = text || '';
-		pre.textContent = lastText;
-		pre.classList.remove('is-loading', 'is-error');
+	function appendChunk(chunk) {
+		if (!streaming) {
+			// 兜底：未调用 setLoading 直接推入
+			clearContainer();
+			streaming = true;
+		}
+		container.classList.remove('is-loading');
+		processChunk(chunk);
+	}
+
+	function finishStreaming() {
+		// 兜底：把流末尾残留的未闭合 HTML 标签起始原样追加（避免半截标签丢失）
+		if (pendingTag) {
+			lastText += pendingTag;
+			const span = document.createElement('span');
+			span.className = 'output__text';
+			span.textContent = pendingTag;
+			container.appendChild(span);
+			pendingTag = '';
+		}
+		streaming = false;
+		// 把占位文本「生成中…」删掉（如果没收到任何 OUT 内容）
+		if (!lastText && container.firstChild?.classList?.contains('output__text') && container.firstChild.textContent === '生成中…') {
+			clearContainer();
+		}
+		container.classList.remove('is-loading', 'is-error');
 		status.textContent = `完成 · ${lastText.length.toLocaleString()} 字`;
 		copyBtn.disabled = !lastText;
 		regenBtn.disabled = false;
 	}
 
+	function setResult(text) {
+		// 兼容完整字符串（fallback 路径）
+		clearContainer();
+		state = 'OUT';
+		pending = '';
+		pendingTag = '';
+		lastText = '';
+		streaming = false;
+		container.classList.remove('is-loading', 'is-error');
+		if (text) processChunk(text);
+		finishStreaming();
+	}
+
 	function setError(msg) {
-		pre.textContent = `× ${msg}`;
-		pre.classList.add('is-error');
-		pre.classList.remove('is-loading');
+		streaming = false;
+		// 流式中断时保留已渲染内容，状态栏标记失败
+		container.classList.add('is-error');
+		container.classList.remove('is-loading');
 		status.textContent = '失败';
-		copyBtn.disabled = true;
+		copyBtn.disabled = !lastText;
 		regenBtn.disabled = false;
+		// 在末尾追加错误信息（仍走 textContent 安全）
+		const span = document.createElement('span');
+		span.className = 'output__text';
+		span.style.color = 'var(--error)';
+		span.textContent = `× ${msg}`;
+		container.appendChild(span);
 	}
 
 	copyBtn.addEventListener('click', async () => {
@@ -65,7 +295,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 			// fallback: 选中文本
 			try {
 				const range = document.createRange();
-				range.selectNodeContents(pre);
+				range.selectNodeContents(container);
 				const sel = getSelection();
 				sel.removeAllRanges();
 				sel.addRange(range);
@@ -84,5 +314,18 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		regenBtn.addEventListener('click', fn);
 	}
 
-	return { setLoading, setResult, setError, onCopy, setRegenHandler, getLastText: () => lastText };
+	function getLastText() {
+		return lastText;
+	}
+
+	return {
+		setLoading,
+		appendChunk,
+		finishStreaming,
+		setResult,
+		setError,
+		onCopy,
+		setRegenHandler,
+		getLastText,
+	};
 }

@@ -152,14 +152,19 @@ function $(id) {
 		output.setLoading();
 		$('btn-generate').disabled = true;
 		try {
-			const text = await generate({
-				baseUrl: latest.baseUrl,
-				apiKey: latest.apiKey,
-				model: latest.model,
-				systemPrompt,
-				userInput,
-			});
-			output.setResult(text);
+			await generate(
+				{
+					baseUrl: latest.baseUrl,
+					apiKey: latest.apiKey,
+					model: latest.model,
+					systemPrompt,
+					userInput,
+				},
+				{
+					onChunk: (chunk) => output.appendChunk(chunk),
+				},
+			);
+			output.finishStreaming();
 			toast('生成成功', 'success');
 		} catch (e) {
 			const msg = e?.message || String(e);

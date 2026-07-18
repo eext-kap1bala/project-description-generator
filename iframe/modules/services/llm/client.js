@@ -8,7 +8,7 @@
  */
 
 const TEST_TIMEOUT_MS = 15000;
-const GENERATE_TIMEOUT_MS = 180000;
+const GENERATE_TIMEOUT_MS = 600000;
 
 /**
  * 拼接 base URL 与端点路径，剥去尾部斜杠。
@@ -82,11 +82,53 @@ export async function testConnection({ baseUrl, apiKey, model }) {
 }
 
 /**
- * 调用 LLM 生成排版文本。
- * 成功返回 string（助手消息 content）
- * 失败抛出 Error
+ * 解析单条 SSE event。
+ *  - 跳过 `: ...` 注释行与空行
+ *  - 合并 `data:` 行，处理 `[DONE]` 哨兵
+ *  - 取 `choices[0].delta.content`，调用 onChunk(delta)
+ *  - 单条解析失败不抛错（避免中断整个流）
  */
-export async function generate({ baseUrl, apiKey, model, systemPrompt, userInput }, { signal } = {}) {
+function parseSseEvent(rawEvent, onChunk) {
+	const lines = rawEvent.split('\n');
+	const dataLines = [];
+	for (const line of lines) {
+		if (!line) continue;
+		if (line.startsWith(':')) continue;
+		if (line.startsWith('data:')) {
+			dataLines.push(line.slice(5).trimStart());
+		}
+	}
+	if (!dataLines.length) return;
+	const payload = dataLines.join('\n');
+	if (payload === '[DONE]') return;
+	try {
+		const json = JSON.parse(payload);
+		const delta = json?.choices?.[0]?.delta?.content;
+		if (typeof delta === 'string' && delta && onChunk) {
+			onChunk(delta);
+		}
+	} catch (_) {
+		// 单条 event 解析失败不影响整体流
+	}
+}
+
+/**
+ * 流式调用 LLM（OpenAI 兼容 SSE 协议）。
+ * 成功 resolve（无返回值）；失败抛 Error。
+ * 每段 delta 通过 onChunk 回调立即推给 UI，调用方可在流未结束时渲染 / 复制。
+ *
+ * @param {Object} args
+ * @param {string} args.baseUrl
+ * @param {string} args.apiKey
+ * @param {string} args.model
+ * @param {string} args.systemPrompt
+ * @param {string} args.userInput
+ * @param {Object} [opts]
+ * @param {(chunk: string) => void} [opts.onChunk]   每段 delta 文本回调
+ * @param {AbortSignal} [opts.signal]               透传外部 AbortSignal
+ * @returns {Promise<void>}
+ */
+export async function generate({ baseUrl, apiKey, model, systemPrompt, userInput }, { onChunk, signal } = {}) {
 	if (!baseUrl) throw new Error('Base URL 为空');
 	if (!apiKey) throw new Error('API Key 为空');
 	if (!model) throw new Error('模型名为空');
@@ -113,6 +155,7 @@ export async function generate({ baseUrl, apiKey, model, systemPrompt, userInput
 					{ role: 'user', content: userInput },
 				],
 				temperature: 0.7,
+				stream: true,
 			}),
 			signal: realSignal,
 		});
@@ -122,12 +165,28 @@ export async function generate({ baseUrl, apiKey, model, systemPrompt, userInput
 			throw new Error(`HTTP ${res.status} — ${text.slice(0, 200)}`);
 		}
 
-		const data = await res.json();
-		const content = data?.choices?.[0]?.message?.content;
-		if (typeof content !== 'string') {
-			throw new Error('响应格式异常：未找到 choices[0].message.content');
+		if (!res.body) {
+			throw new Error('响应异常：浏览器不支持流式读取（res.body 为空）');
 		}
-		return content;
+
+		const reader = res.body.getReader();
+		const decoder = new TextDecoder('utf-8');
+		let buffer = '';
+		while (true) {
+			const { value, done } = await reader.read();
+			if (done) break;
+			buffer += decoder.decode(value, { stream: true });
+
+			// 按 \n\n 切 SSE event
+			let eventEnd;
+			while ((eventEnd = buffer.indexOf('\n\n')) !== -1) {
+				const rawEvent = buffer.slice(0, eventEnd);
+				buffer = buffer.slice(eventEnd + 2);
+				parseSseEvent(rawEvent, onChunk);
+			}
+		}
+		// 处理流末尾残留的半截 event
+		if (buffer.trim()) parseSseEvent(buffer, onChunk);
 	} catch (e) {
 		if (e.name === 'AbortError') {
 			throw new Error(`请求超时（${GENERATE_TIMEOUT_MS / 1000}s）`);
