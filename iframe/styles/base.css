@@ -88,3 +88,15 @@ a {
 	outline-offset: 2px;
 	border-radius: var(--radius-sm);
 }
+
+/* 统一减少动效偏好：尊重系统设置 */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}

@@ -61,6 +61,41 @@
 	--space-4: 16px;
 	--space-5: 20px;
 	--space-6: 24px;
+
+	/* ============ Material 3 新增令牌 ============ */
+
+	/* Surface tonal（M3 surface container 层级） */
+	--surface-container-lowest: #ffffff;
+	--surface-container-low: #f7f7f8;
+	--surface-container: #f1f1f3;
+	--surface-container-high: #ebebed;
+	--surface-container-highest: #e3e3e6;
+
+	/* Elevation 阴影（dp 0–6） */
+	--elev-dp0: none;
+	--elev-dp1: 0 1px 2px rgba(17, 24, 39, 0.06), 0 1px 3px rgba(17, 24, 39, 0.1);
+	--elev-dp2: 0 1px 2px rgba(17, 24, 39, 0.06), 0 2px 6px rgba(17, 24, 39, 0.1);
+	--elev-dp3: 0 4px 8px rgba(17, 24, 39, 0.08), 0 1px 3px rgba(17, 24, 39, 0.1);
+	--elev-dp4: 0 6px 12px rgba(17, 24, 39, 0.1), 0 2px 4px rgba(17, 24, 39, 0.06);
+	--elev-dp6: 0 12px 24px rgba(17, 24, 39, 0.12), 0 4px 8px rgba(17, 24, 39, 0.08);
+
+	/* State-layer（hover 8% / focus 12% / pressed 12%） */
+	--state-hover: rgba(17, 24, 39, 0.08);
+	--state-focus: rgba(17, 24, 39, 0.12);
+	--state-pressed: rgba(17, 24, 39, 0.12);
+	--state-primary-hover: rgba(255, 255, 255, 0.16);
+	--state-primary-pressed: rgba(255, 255, 255, 0.24);
+
+	/* 圆角（连续梯度增量；4 → 8 → 12 → 16 → 28 全套） */
+	--radius-xs: 4px;
+	--radius-md: 12px; /* 与 --radius-lg 同值，作 M3 medium 语义别名 */
+	--radius-xl: 16px;
+	--radius-2xl: 28px;
+
+	/* 过渡（M3 standard easing，比旧 (0.4,0,0.2,1) 更轻快） */
+	--transition-fast: 100ms cubic-bezier(0.2, 0, 0, 1);
+	--transition-medium: 200ms cubic-bezier(0.2, 0, 0, 1);
+	/* --transition (150ms 旧值) 保留作为过渡期别名 */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -86,5 +121,25 @@
 
 		--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
 		--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.2);
+
+		/* ============ dark mode: Material 3 镜像 ============ */
+
+		/* Surface tonal（M3 dark surface container 体系） */
+		--surface-container-lowest: #0a0c10;
+		--surface-container-low: #16181d;
+		--surface-container: #1c1f25;
+		--surface-container-high: #23272f;
+		--surface-container-highest: #2e333c;
+
+		/* dark elevation 更深更黑（alpha 提高） */
+		--elev-dp1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.24);
+		--elev-dp2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px rgba(0, 0, 0, 0.24);
+		--elev-dp3: 0 4px 8px rgba(0, 0, 0, 0.32), 0 1px 3px rgba(0, 0, 0, 0.24);
+		--elev-dp4: 0 6px 12px rgba(0, 0, 0, 0.36), 0 2px 4px rgba(0, 0, 0, 0.24);
+		--elev-dp6: 0 12px 24px rgba(0, 0, 0, 0.4), 0 4px 8px rgba(0, 0, 0, 0.28);
+
+		/* dark primary overlay 仍为 white 叠加（accent 是浅紫，白色更鲜明） */
+		--state-primary-hover: rgba(255, 255, 255, 0.16);
+		--state-primary-pressed: rgba(255, 255, 255, 0.24);
 	}
 }
