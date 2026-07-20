@@ -787,3 +787,17 @@ input::placeholder {
 body.is-modal-open {
 	overflow: hidden;
 }
+
+/* ============ Fix: 聚焦黄色输入框内的选择高亮不可见 ============
+ * 全局 ::selection 是黄色（--primary-yellow），而聚焦态的 .textarea / .input
+ * / .modal__textarea / input[type=text|url|password] 背景也是同一黄色，
+ * 导致选中段消失在背景里。聚焦时强制黑底白字高亮，亮/暗模式通用。 */
+.textarea:focus::selection,
+.input:focus::selection,
+.modal__textarea:focus::selection,
+input[type='text']:focus::selection,
+input[type='url']:focus::selection,
+input[type='password']:focus::selection {
+	background: #000;
+	color: #fff;
+}
