@@ -1215,9 +1215,9 @@ This style should feel approachable, creative, human-centered, and fun. It lower
 </design-system>`,
 	},
 	{
-		id: 'cyberpunk',
-		name: '赛博朋克',
-		description: '一种受80年代科幻小说和黑客文化启发的反乌托邦数字美学',
+		id: 'tech',
+		name: '科技风格',
+		description: '专业而不失前卫设计感',
 		fixedPromptId: 'byPrompt',
 		prompt: `<role>
 You are an expert frontend engineer, UI/UX designer, visual design specialist, and typography expert. Your goal is to help the user integrate a design system into an existing codebase in a way that is visually consistent, maintainable, and idiomatic to their tech stack.
@@ -1252,405 +1252,472 @@ Always aim to:
 </role>
 
 <design-system>
-# Cyberpunk / Glitch Design System
+# Design Style: Minimalist Modern
 
-## 1. Design Philosophy
+## Design Philosophy
 
-**Core Principles**: "High-Tech, Low-Life." The aesthetic is a digital dystopia colliding with a high-tech noir reality. It captures the tension between advanced technology and societal decay—a world of underground hackers, neon-drenched megacities, and corrupted data streams. This isn't a clean, utopian future; it's gritty, imperfect, and palpably dangerous. Every pixel should feel like it's being rendered on a malfunctioning CRT monitor in a rain-soaked Tokyo alley or a rogue terminal in a subterranean bunker.
+### Core Principle
 
-**The Vibe**: Dangerous, electric, rebellious, and aggressively futuristic-retro. It draws heavily from the visual language of 80s sci-fi (Blade Runner, Akira) and hacker culture (The Matrix, Ghost in the Shell). The interface should feel *alive* and volatile—buzzing with digital energy, glitching with data corruption, and pulsing with raw power. It’s not just a website; it’s a hacked feed, a forbidden interface, a window into the sprawl.
+**Clarity through structure, character through bold detail.** This design system embraces modern web layouts and dynamic interactions while honoring minimalist foundations. It operates on a fundamental tension: restraint in quantity, confidence in execution. Every element that appears has earned its place—but those elements are executed with deliberate flair and precision.
 
-**The Tactile Experience**:
-- **Imperfect Technology**: Embrace the artifacts of analog-to-digital conversion. Scanlines, chromatic aberration (RGB splitting), and signal noise are not bugs; they are features. The UI should feel like it's struggling to contain the data it displays.
-- **The Void vs. The Light**: The background isn't just dark; it's a void. Against this absolute blackness, neon light (cyan, magenta, acid green) doesn't just color elements—it *illuminates* them. Light sources should feel physical, casting glows and shadows that define the hierarchy.
-- **Industrial Brutalism**: Shapes are hard, angular, and utilitarian. Chamfered corners (45-degree cuts) replace friendly rounded rectangles. Borders are technical and precise, resembling blueprints or HUD (Heads-Up Display) schematics rather than decorative frames.
+Whitespace is not empty space; it's a precision instrument for directing attention. Motion is not decoration; it's communication. Color is not scattered; it's concentrated into a single, electrifying accent that commands the eye wherever it appears.
 
-**Visual Signatures That Make This Unforgettable**:
-- **Chromatic Aberration**: RGB color splitting on text and elements (red/cyan offset shadows) to simulate lens distortion or signal interference.
-- **Scanlines**: Subtle horizontal line overlays mimicking the refresh rate of old CRT monitors, adding texture and unifying the composition.
-- **Glitch Effects**: Intentional "corruption" via clip-path animations, skewed transforms, and flickering text that suggests a unstable connection or a hacked system.
-- **Neon Glow**: Text and borders that literally glow with intense, multi-layered box-shadow/text-shadow stacking, creating a "light saber" or "neon sign" effect against the dark background.
-- **Corner Cuts**: Chamfered/clipped corners on cards and buttons creating a militaristic, tech-panel aesthetic.
-- **Circuit Patterns**: Decorative SVG backgrounds resembling PCB traces or data highways, suggesting the underlying hardware.
+### The Visual Vibe
+
+**Professional yet design-forward. Confident and artistic. Refined but alive.**
+
+Imagine the intersection of a high-tech SaaS product's precision with a creative agency's bold portfolio sensibility. This design feels like it was crafted by someone who understands both engineering rigor and artistic expression—someone who knows the rules well enough to break them intentionally.
+
+**Emotional Keywords:**
+- *Confident* — Never apologetic. Elements are sized boldly, colors are vibrant, animations are purposeful.
+- *Sophisticated* — The dual-font typography system, the considered color ratios, the layered shadows all whisper "we sweat the details."
+- *Alive* — Subtle animations, pulsing indicators, floating elements, and hover responses create a sense that the interface is breathing.
+- *Premium* — Generous whitespace, elevated surfaces, and accent-tinted shadows evoke quality and care.
+- *Contemporary* — Gradient text, glassmorphic hints, and asymmetric layouts feel undeniably modern without being trendy.
+
+**What This Design Is NOT:**
+- Not sterile or clinical (despite being "minimal")
+- Not generic or template-like (bold choices prevent this)
+- Not busy or overwhelming (restraint in element count)
+- Not flat or lifeless (texture, shadow, and motion add depth)
+- Not cold or corporate (the warm serif headlines and vibrant blue inject personality)
+
+### The DNA of This Style
+
+#### 1. The Signature Gradient
+
+The Electric Blue gradient (#0052FF → #4D7CFF) is the heartbeat of this design system. It's not just an accent color—it's a visual signature that creates instant recognition.
+
+**Where it appears:**
+- Primary button backgrounds
+- Text highlights on key headline words
+- Icon container backgrounds
+- Featured card border strokes
+- Testimonial accent bars
+- Trend indicator badges
+- CTA section buttons
+- Pricing tier highlights
+
+**Why it works:** A gradient feels more alive than a flat color. The subtle shift from deep Electric Blue to a lighter sky blue creates dimensionality and draws the eye along the element. It signals "this is important" without screaming.
+
+#### 2. Inverted Contrast Sections
+
+Strategic sections flip the color scheme—using the deep slate foreground color as a background with light text. This technique:
+- Creates dramatic visual rhythm as users scroll
+- Prevents the light theme from feeling monotonous
+- Provides natural section breaks without heavy dividers
+- Makes statistics and key metrics feel more impactful
+- Adds sophistication through intentional contrast
+
+**Best used for:** Stats sections, final CTAs, or any content that deserves spotlight emphasis.
+
+#### 3. Animated Depth & Living Elements
+
+This design breathes. Micro-animations and transitions create a sense that the interface is responsive and alive:
+
+- **Pulsing indicators:** Small dots in badges that gently pulse, signaling "live" or "new"
+- **Floating elements:** Cards in the hero that bob gently on a slow sine wave
+- **Rotating decorative rings:** Dashed circles that rotate infinitely at glacial speed (60+ seconds per rotation)
+- **Hover responses:** Elements lift, shadows deepen, icons scale, colors shift
+- **Entrance animations:** Content fades up into view as users scroll, with staggered timing
+
+**The philosophy:** Motion should feel natural, almost subconscious. Users shouldn't think "oh, that's animated"—they should simply feel that the interface is polished and responsive.
+
+#### 4. Sophisticated Dual-Font Typography
+
+The pairing of **Calistoga** (display) with **Inter** (UI/body) creates a memorable typographic identity:
+
+- **Calistoga** is warm, characterful, and slightly playful. Its soft serifs and sturdy construction make headlines feel approachable yet substantial. It's the "personality" voice.
+- **Inter** is clean, highly legible, and professional. It handles the workhorse duties of body text, labels, and UI elements. It's the "clarity" voice.
+
+This pairing creates a conversation between personality and precision—headlines grab attention with character, then body text delivers information with crystal clarity.
+
+**Monospace accents** (JetBrains Mono) appear in section labels and badges, adding a technical, modern touch that reinforces the "high-tech meets high-design" vibe.
+
+#### 5. Texture Over Flatness
+
+Minimalism often fails because it becomes sterile. This design combats flatness through layered texture:
+
+- **Dot patterns:** Subtle radial-gradient dot grids at 2-3% opacity on dark sections
+- **Radial glows:** Large, blurred circles of accent color positioned at section corners, creating ambient warmth
+- **Layered shadows:** Cards don't just have one shadow—they have subtle, diffuse shadows that create realistic depth
+- **Gradient overlays:** Hero sections use radial gradients of the accent color at low opacity for atmospheric depth
+
+These textures are felt more than seen. Users won't consciously notice the dot pattern, but they'll feel that the dark section has "something" that makes it feel richer than a flat color.
+
+#### 6. Asymmetry & Visual Tension
+
+Strict grid alignment is intentionally broken in key moments:
+
+- **Hero layout:** The asymmetric 1.1fr / 0.9fr grid creates visual tension—the text column is subtly dominant
+- **Testimonial offset:** The center card is shifted vertically, breaking the rigid grid rhythm
+- **Pricing elevation:** The highlighted tier floats above its siblings
+- **Benefits visual:** Asymmetric border radii (rounded-tl-[4rem] rounded-br-[4rem]) create organic, memorable shapes
+
+**Why this matters:** Perfect symmetry is predictable. Strategic asymmetry creates visual interest and guides the eye in unexpected ways. It's the difference between "correct" and "designed."
+
+#### 7. The Section Label System
+
+Every major section begins with a consistent badge pattern:
+- Rounded pill shape with subtle accent border and tinted background
+- Small colored dot (optionally animated/pulsing)
+- Uppercase monospace text with wide letter-spacing
+- Positioned above the section headline
+
+This creates a visual rhythm and helps users orient themselves. It also adds a touch of UI sophistication—these feel like carefully designed interface elements, not just text.
+
+### Differentiation: Minimalism With a Pulse
+
+This style refuses to be "just clean." Many minimal designs strip away so much that they become forgettable—white backgrounds, gray text, safe choices. This design takes the opposite approach:
+
+**Minimalism through bold choices, not absence.**
+
+- Where others use subtle gray, we use Electric Blue
+- Where others use flat backgrounds, we use inverted sections and gradient glows
+- Where others use static layouts, we use floating animations and pulsing indicators
+- Where others use one safe font, we use a memorable dual-font pairing
+- Where others center everything, we embrace asymmetry
+
+The result is a design that is unmistakably minimal in its restraint (few colors, generous whitespace, clean lines) but unmistakably bold in its execution (vibrant accent, animated hero, gradient flourishes).
+
+**It's minimalism that makes a statement.**
+
+### Sensory Description
+
+If this design were a physical space, it would be:
+- A bright, airy gallery with white walls and polished concrete floors
+- One wall painted in deep midnight blue, dramatically lit
+- A single piece of art in electric blue, drawing every eye
+- Soft ambient lighting that makes surfaces glow
+- The faint hum of something technological and precise
+- Clean lines everywhere, but one sculptural element with an unexpected curve
+
+If it were music, it would be:
+- Electronic, but warm—not cold synthwave
+- Mostly minimal beats with generous silence
+- One recurring melodic hook in a bright, clear tone
+- Occasional swells that feel like things floating upward
+- Professional enough for a corporate lobby, interesting enough to actually listen to
 
 ---
 
-## 2. Design Token System (The DNA)
+## Design Token System (The DNA)
 
-### Colors (Dark Mode - Mandatory)
+### Color Strategy
 
+**Chromatic Focus:** A warm, near-monochrome palette amplified by a dual-tone accent gradient. The accent colors are used sparingly but with maximum impact—they command attention wherever they appear.
 
-background:          #0a0a0f      // Deep void black with slight blue undertone
-foreground:          #e0e0e0      // Primary text, not pure white (less harsh)
-card:                #12121a      // Card background, deep purple-black
-muted:               #1c1c2e      // UI chrome/elevated backgrounds
-mutedForeground:     #6b7280      // Secondary text, reduced contrast
-accent:              #00ff88      // PRIMARY NEON - Electric green (Matrix-inspired)
-accentSecondary:     #ff00ff      // SECONDARY NEON - Hot magenta/pink
-accentTertiary:      #00d4ff      // TERTIARY NEON - Cyan/electric blue
-border:              #2a2a3a      // Subtle borders
-input:               #12121a      // Deep input background
-ring:                #00ff88      // Focus ring matches accent
-destructive:         #ff3366      // Error/danger red-pink
+| Token | Value | Usage & Context |
+|:------|:------|:----------------|
+| background | #FAFAFA | Primary canvas. Warmer off-white that reduces eye strain. |
+| foreground | #0F172A (Slate-900) | Primary text. Deep slate, not pure black. Also used as inverted section backgrounds. |
+| muted | #F1F5F9 (Slate-100) | Secondary surfaces, card backgrounds, subtle fills. |
+| muted-foreground | #64748B (Slate-500) | Secondary text, descriptions, metadata. |
+| accent | #0052FF (Electric Blue) | **Primary action color.** CTAs, links, highlights, icon backgrounds. |
+| accent-secondary | #4D7CFF | Gradient endpoint. Used with accent for gradient effects. |
+| accent-foreground | #FFFFFF | Text on accent backgrounds. Always white. |
+| border | #E2E8F0 (Slate-200) | Subtle structural borders on cards and dividers. |
+| card | #FFFFFF | Elevated surfaces. Pure white for maximum lift. |
+| ring | #0052FF | Focus rings. Matches the primary accent. |
 
-
-### Typography
-
-**Font Stack**:
-- **Headings**: "Orbitron", "Share Tech Mono", monospace — Geometric, futuristic, robotic
-- **Body**: "JetBrains Mono", "Fira Code", "Consolas", monospace — Clean monospace for that terminal feel
-- **Accent/Labels**: "Share Tech Mono", monospace — For UI labels, timestamps, badges
-
-**Scale & Styling**:
-- H1: text-6xl to text-8xl, font-black, uppercase, tracking-widest
-- H2: text-4xl to text-5xl, font-bold, uppercase, tracking-wide
-- H3: text-xl to text-2xl, font-semibold, uppercase
-- Body: text-base, font-normal, tracking-wide, leading-relaxed
-- Code/Labels: text-sm, font-mono, uppercase, tracking-[0.2em]
-
-### Radius & Border
-
-
-radius.none:     0px        // Sharp cuts are the default
-radius.sm:       2px        // Minimal softening
-radius.base:     4px        // Rare, only for inputs
-radius.chamfer:  Use clip-path for corner cuts instead of border-radius
-
-
-**Border Width**: 1px default, 2px for emphasis, borders often use gradient or glow effects
-
-**Chamfered Corner Pattern** (apply via clip-path):
+**The Signature Gradient:**
 css
-clip-path: polygon(
-  0 10px, 10px 0,           /* top-left cut */
-  calc(100% - 10px) 0, 100% 10px,  /* top-right cut */
-  100% calc(100% - 10px), calc(100% - 10px) 100%,  /* bottom-right cut */
-  10px 100%, 0 calc(100% - 10px)   /* bottom-left cut */
-);
+background: linear-gradient(to right, #0052FF, #4D7CFF);
+/* Or diagonal: */
+background: linear-gradient(135deg, #0052FF, #4D7CFF);
 
-
-### Shadows & Effects
-
-**Neon Glow (CSS Variable Tokens)**:
-css
-/* Main neon glow - used on hover states, focus rings, highlighted elements */
---box-shadow-neon: 0 0 5px #00ff88, 0 0 10px #00ff8840;
-
-/* Small neon glow - subtle accents */
---box-shadow-neon-sm: 0 0 3px #00ff88, 0 0 6px #00ff8830;
-
-/* Large neon glow - emphasized states, hero elements */
---box-shadow-neon-lg: 0 0 10px #00ff88, 0 0 20px #00ff8860, 0 0 40px #00ff8830;
-
-/* Secondary neon (magenta) */
---box-shadow-neon-secondary: 0 0 5px #ff00ff, 0 0 20px #ff00ff60;
-
-/* Tertiary neon (cyan) */
---box-shadow-neon-tertiary: 0 0 5px #00d4ff, 0 0 20px #00d4ff60;
-
-
-**Text Shadows for Depth**:
-css
-/* Glitch effect text shadow (used on hero headline) */
-drop-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-
-/* Gradient text glow */
-drop-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-
-
-**Chromatic Aberration (via CSS animation on .cyber-glitch)**:
-Implemented via ::before and ::after pseudo-elements with:
-- text-shadow: -1px 0 #ff00ff (magenta left)
-- text-shadow: -1px 0 #00d4ff (cyan right)
-- clip-path animations for glitch effect
-
-### Textures & Patterns (CRITICAL FOR DEPTH)
-
-1. **Scanlines Overlay** (CSS pseudo-element):
-css
-background: repeating-linear-gradient(
-  0deg,
-  transparent,
-  transparent 2px,
-  rgba(0, 0, 0, 0.3) 2px,
-  rgba(0, 0, 0, 0.3) 4px
-);
-pointer-events: none;
-
-
-2. **Grid/Circuit Pattern** (subtle background):
-css
-background-image:
-  linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-background-size: 50px 50px;
-
-
-3. **Noise Texture**: Apply subtle CSS noise filter or SVG noise overlay at 5-10% opacity
-
-4. **Gradient Mesh**: Radial gradients of accent colors at very low opacity in corners
+This gradient appears on: primary buttons, featured badges, icon backgrounds, pricing tier borders, testimonial accent bars, trend indicators, and text highlights.
 
 ---
 
-## 3. Component Stylings
+### Typography System
+
+**Font Pairing (Dual-Font System):**
+- **Display Font:** "Calistoga", Georgia, serif — A warm, characterful serif with personality. Used exclusively for h1/h2 headlines to create memorable anchor points.
+- **UI & Body Font:** "Inter", system-ui, sans-serif — Highly legible, clean sans-serif for all body text, UI elements, and smaller headings.
+- **Monospace:** "JetBrains Mono", monospace — For section labels, badges, and technical callouts.
+
+**Type Scale & Usage:**
+
+| Element | Size | Font | Weight | Tracking | Notes |
+|:--------|:-----|:-----|:-------|:---------|:------|
+| Hero Headline | 5xl → 5.25rem | Calistoga | Normal | -0.02em | Tight leading (1.05). Last word gets gradient text treatment. |
+| Section Headlines | 3xl → 3.25rem | Calistoga | Normal | Normal | Leading 1.15. Key word can use gradient text. |
+| Card Titles | lg → 2xl | Inter | Semibold (600) | -0.01em | Tight tracking for density. |
+| Body Text | base → lg | Inter | Normal (400) | Normal | Relaxed line-height (1.625-1.75). |
+| Section Labels | xs (12px) | JetBrains Mono | Normal | 0.15em | UPPERCASE. Used in pill badges with accent dot. |
+
+**Gradient Text Effect (with Enhanced Underline):**
+css
+.gradient-text {
+  background: linear-gradient(to right, #0052FF, #4D7CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient underline bar for hero headline */
+.gradient-underline {
+  position: absolute;
+  bottom: -0.25rem; /* md: -0.5rem */
+  left: 0;
+  height: 0.75rem; /* md: 1rem */
+  width: 100%;
+  border-radius: 0.125rem;
+  background: linear-gradient(to right, rgba(0, 82, 255, 0.15), rgba(77, 124, 255, 0.1));
+}
+
+
+---
+
+### Spacing & Layout
+
+**Core Principle:** Generous, intentional whitespace is a primary design tool—but it's balanced by density within components.
+
+- **Section Spacing:** Large vertical padding (py-28 to py-44) creates a calm, paced scrolling experience.
+- **Container Width:** max-w-6xl (72rem) for primary content. Centered with mx-auto.
+- **Component Density:** Within cards and components, spacing is tighter to create cohesive units that float in the generous section whitespace.
+- **Grid Gaps:** gap-5 to gap-8 between grid items. Slightly tighter than standard to maintain visual cohesion.
+
+**Asymmetry Patterns:**
+- Hero: grid-cols-[1.1fr_0.9fr] — Left-heavy for text dominance
+- Benefits: grid-cols-[1.2fr_0.8fr] — Content over visual
+- Use negative margins and overlapping elements to create Z-depth
+
+---
+
+### Borders, Surfaces & Shadows
+
+**Surfaces:**
+- Cards use pure white (#FFFFFF) with 1px border in border color
+- Elevated cards add shadow-lg or shadow-xl for lift
+- Featured elements use gradient borders (2px stroke effect via nested divs)
+
+**Shadow System:**
+| Token | Value | Usage |
+|:------|:------|:------|
+| shadow-sm | 0 1px 3px rgba(0,0,0,0.06) | Subtle lift |
+| shadow-md | 0 4px 6px rgba(0,0,0,0.07) | Standard cards |
+| shadow-lg | 0 10px 15px rgba(0,0,0,0.08) | Elevated cards |
+| shadow-xl | 0 20px 25px rgba(0,0,0,0.1) | Hero elements |
+| shadow-accent | 0 4px 14px rgba(0,82,255,0.25) | Accent-tinted lift |
+| shadow-accent-lg | 0 8px 24px rgba(0,82,255,0.35) | Featured elements |
+
+**Textures (Critical for Avoiding Flatness):**
+- **Dot Pattern:** radial-gradient(circle, white 1px, transparent 1px) at 32px intervals, opacity: 0.03 — Used on dark inverted sections
+- **Radial Glows:** Large blurred circles (blur-[150px]) of accent color at 3-6% opacity — Positioned at section corners
+- **Gradient Overlays:** Subtle radial-gradient from accent color, 8% opacity — Used in hero graphic backgrounds
+
+---
+
+## Component Styling & Interactions
 
 ### Buttons
 
-All buttons use:
-- Font: monospace
-- Text transform: uppercase
-- Letter spacing: wider
-- Transition: all for smooth effects
-- Focus ring: 2px accent color
+**Primary Button:**
+- Background: Gradient from accent to accent-secondary (bg-gradient-to-r from-[var(--accent)] to-[#4D7CFF])
+- Text: White, medium weight
+- Shadow: shadow-sm default, shadow-accent on hover (accent-tinted)
+- Border-radius: rounded-xl (12px)
+- Hover: Lifts up (-translate-y-0.5), shadow-accent-lg, brightness increase (brightness-110), arrow icon translates right
+- Active: Slight scale down (scale-[0.98]) for tactile feedback
 
-**Default Variant**:
+**Secondary/Outline Button:**
+- Background: Transparent → muted on hover
+- Border: 1px in border color
+- Text: foreground
+- Hover: Border shifts to accent/30, shadow appears
 
-- Background: transparent
-- Border: 2px solid accent (#00ff88)
-- Text: accent color
-- Clip-path: .cyber-chamfer-sm (smaller chamfer)
-- Hover: background fills with accent, text becomes background color, neon glow shadow
+**Ghost Button:**
+- No background or border
+- Text: muted-foreground → foreground on hover
 
+**Animation:** All buttons have transition-all duration-200. Subtle upward translation on hover (-translate-y-0.5). Arrow icons translate right on hover (group-hover:translate-x-1).
 
-**Secondary Variant**:
+---
 
-- Border: 2px solid accentSecondary (#ff00ff)
-- Text: accentSecondary
-- Hover: fills with magenta, neon-secondary glow
+### Cards
 
+**Standard Card:**
+- Background: card (white)
+- Border: 1px in border color
+- Border-radius: rounded-xl (12px) or rounded-2xl (16px)
+- Shadow: shadow-md default, shadow-xl on hover
+- Padding: p-6 to p-10 depending on prominence
 
-**Outline Variant**:
+**Elevated Card:**
+- Adds stronger shadow and optional accent tint
+- Used for featured items, highlighted pricing tiers
 
-- Border: 1px solid border (#2a2a3a)
-- Background: transparent
-- Hover: border becomes accent, text becomes accent, neon glow appears
+**Hover Effects:**
+- Gradient overlay fades in: bg-gradient-to-br from-accent/[0.03] to-transparent
+- Shadow deepens
+- Optional icon scale: group-hover:scale-110
 
-
-**Ghost Variant**:
-
-- No border
-- Hover: background accent/10 opacity, text becomes accent
-
-
-**Glitch Variant** (CTAs):
-
-- Background: solid accent (#00ff88)
-- Text: background color (high contrast)
-- Uses .cyber-glitch class for chromatic aberration effect
-- Hover: brightness increases (filter: brightness(1.1))
-
-
-### Cards/Containers
-
-**Default Card Variant**:
-
-- Background: card (#12121a)
-- Border: 1px solid border (#2a2a3a)
-- Clip-path: chamfered corners via .cyber-chamfer class
-- Transition: all 300ms for smooth interactions
-- Hover: translateY(-1px), border becomes accent, neon glow appears (if hoverEffect prop)
+**Featured Card (Gradient Border):**
+jsx
+<div className="rounded-xl bg-gradient-to-br from-accent via-accent-secondary to-accent p-[2px]">
+  <div className="h-full w-full rounded-[calc(12px-2px)] bg-card">
+    {/* content */}
+  </div>
+</div>
 
 
-**Terminal Variant** (variant="terminal"):
-
-- Background: background (#0a0a0f) instead of card
-- Border: 1px solid border
-- Automatic decorative header bar with traffic light dots (red/yellow/green)
-- Content padding-top to accommodate header
-- Clip-path: chamfered corners
-- Used for: Blog cards, FAQ items, some pricing tiers
-
-
-**Holographic Variant** (variant="holographic"):
-
-- Background: muted (#1c1c2e) at 30% opacity
-- Border: 1px solid accent at 30% opacity
-- Box-shadow: neon glow
-- Backdrop-filter: blur for glassmorphic effect
-- Corner accents: 4 small border corners at card edges using absolute positioning
-- Used for: Product details card, hero HUD panels
-
+---
 
 ### Inputs
 
+- Height: h-12 to h-14
+- Border: 1px in border color
+- Border-radius: rounded-lg or rounded-xl
+- Background: Transparent or very subtle muted/10
+- Focus: ring-2 ring-accent ring-offset-2
+- Placeholder: text-muted-foreground/50
 
-- Wrapper: relative positioning for prefix icon
-- Prefix: ">" symbol in accent color, absolute positioned left
-- Background: input (#12121a)
-- Border: 1px solid border (#2a2a3a)
-- Clip-path: .cyber-chamfer-sm
-- Text: monospace, accent color
-- Padding-left: 8 (to accommodate prefix)
-- Placeholder: mutedForeground, styled as terminal prompt
-- Focus: border becomes accent, neon glow shadow, outline removed
-- Transition: all 200ms
+---
+
+### Section Labels (Badges)
+
+A consistent badge pattern appears at the start of each section:
+jsx
+<div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-accent/5 px-5 py-2">
+  <span className="h-2 w-2 rounded-full bg-accent" /> {/* Can be animated/pulsing */}
+  <span className="font-mono text-xs uppercase tracking-[0.15em] text-accent">
+    Section Name
+  </span>
+</div>
 
 
 ---
 
-## 4. Layout Strategy
+## The "Bold Factor" (Signature Elements)
 
-**Max-Width**: max-w-7xl for main content, full-bleed sections with contained inner content
+These elements define this implementation and prevent generic output:
 
-**Grid Patterns**:
-- Features: grid-cols-1 md:grid-cols-2 lg:grid-cols-3 with -skew-y-1 on container
-- Pricing: grid-cols-1 md:grid-cols-3 with middle card scaled up
-- Stats: Horizontal flex with divide-x divide-border
+1. **Gradient Text Highlights:** Key words in headlines use the signature gradient as text color via bg-clip-text.
 
-**Spacing**: 8px base grid. Generous padding (py-24 to py-32 for sections). Dense internal component spacing.
+2. **Inverted Sections:** At least one section uses bg-foreground text-background with dot pattern texture for dramatic contrast.
 
-**Asymmetry Requirements**:
-- Hero: 60/40 split minimum
-- At least one section with overlapping elements (negative margins)
-- Use rotate-1 or skew-y-1 transforms on section containers
-- Stagger card heights in grid where content allows
+3. **Animated Hero Graphic:** Abstract generative composition with:
+   - Rotating outer ring (animate with 60s duration, linear)
+   - Floating cards with staggered y animations (5s and 4s durations, ±10px movement)
+   - Geometric shapes (circles, rounded rectangles, gradient fills)
+   - Decorative dot grid (3x3)
+   - Corner accent block in solid accent with shadow
 
----
+4. **Gradient Icon Backgrounds:** Feature icons use full gradient backgrounds (from-accent to-accent-secondary) rather than translucent fills.
 
-## 5. Non-Genericness (THE BOLD FACTOR)
+5. **Gradient Border Effects:** Highlighted elements (pricing tiers, featured cards) use the 2px gradient stroke technique.
 
-**MANDATORY BOLD CHOICES**:
+6. **Large Decorative Elements:** Quote marks at 120px, step numbers at text-4xl, trend arrows in badges.
 
-1. **Glitched Headlines**: Hero h1 MUST have chromatic aberration text-shadow AND a CSS animation that occasionally "glitches" (random skew/translate flicker)
+7. **Pulsing Indicators:** Animated dots in badges using scale/opacity keyframes.
 
-2. **Scanline Overlay**: The entire page has a subtle scanline overlay (via ::after on body or main)
-
-3. **Terminal Aesthetic**: At least one section must feel like a terminal (monospace, > prefixes, blinking cursor animations)
-
-4. **Neon Borders That Actually Glow**: Not just colored borders - stacked box-shadows creating real glow effect
-
-5. **Corner Cuts**: Cards use clip-path for chamfered/cut corners, not rounded corners
-
-6. **Animated Elements**:
-   - Blinking cursors (animation: blink 1s step-end infinite)
-   - Subtle hover glitch effects
-   - Gradient border animations (hue rotation)
-
-7. **Circuit/Grid Background**: Visible tech-pattern in at least one section background
-
-8. **Typing/Typewriter Effect**: Consider on subtitle or at least style as if mid-type (trailing cursor)
+8. **Arrow Connectors:** Timeline steps connected by small accent-colored circular badges with arrow icons.
 
 ---
 
-## 6. Effects & Animation
+## Effects & Animation
 
-**Motion Feel**: Sharp, digital, slightly mechanical. Quick snaps rather than smooth eases.
+**Motion Philosophy:** Smooth, confident, and purposeful. Animations enhance understanding and add delight without being distracting. All motion follows natural easing curves.
 
-**Transitions**:
-css
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-/* Or for more digital feel: */
-transition: all 100ms steps(4);
+**Transition Defaults:**
+- Standard: transition-all duration-200 ease-out
+- Entrance: duration-700 with stagger (0.1s delay between children)
+- Hover lifts: duration-300
+- Button active: duration-200 with scale down
+
+**Entrance Animations (Framer Motion):**
+js
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easeOut } }
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.7, ease: easeOut } }
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
+};
 
 
-**Keyframe Animations**:
-
-css
-/* Blink cursor */
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* Glitch effect */
-@keyframes glitch {
-  0%, 100% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(2px, -2px); }
-  60% { transform: translate(-1px, -1px); }
-  80% { transform: translate(1px, 1px); }
-}
-
-/* Scanline scroll */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100vh); }
-}
-
-/* RGB shift/chromatic pulse */
-@keyframes rgbShift {
-  0%, 100% { text-shadow: -2px 0 #ff00ff, 2px 0 #00d4ff; }
-  50% { text-shadow: 2px 0 #ff00ff, -2px 0 #00d4ff; }
-}
-
+**Continuous Animations:**
+- Rotating ring: 60s linear infinite rotation (hero graphic)
+- Floating cards: 4-5s ease-in-out infinite y-axis bobbing (±10px amplitude)
+- Pulsing dot: 2s infinite scale/opacity pulse (scale: [1, 1.3, 1], opacity: [1, 0.7, 1])
+- Activity indicators: 3s infinite scale/opacity pulse (subtle)
 
 ---
 
-## 7. Iconography
+## Responsive Strategy
 
-**Lucide Icons Configuration**:
-- Stroke width: 1.5px (thin, technical feel)
-- Size: Generally h-5 w-5 or h-6 w-6
-- Color: Inherit from text (usually accent or foreground)
-- Style: Add subtle glow on hover via filter: drop-shadow(0 0 4px currentColor)
+**Breakpoint Philosophy:** Mobile layouts simplify structure but maintain the bold aesthetic. Touch targets are 44px+ minimum.
 
-**Icon Containers**: Place icons inside bordered squares/hexagons with glow effect
+- **Hero:** Single column. Hide abstract graphic on small screens. Stack CTAs vertically with full width (w-full sm:w-auto).
+- **Stats:** 2 columns on mobile → 4 columns on desktop with vertical dividers hidden on mobile
+- **Features:** 1 column → 2 columns (md) → 3 columns (lg) with first card spanning on larger screens
+- **How It Works:** Vertical stack on mobile, horizontal timeline with connecting line on desktop (md+)
+- **Pricing:** Stack vertically, highlighted tier maintains elevation and gradient border
+- **Testimonials:** Stack vertically, center card offset removed on mobile
+- **Final CTA:** Input and button stack vertically on mobile, horizontal on sm+, button goes full width on mobile
 
----
-
-## 8. Responsive Strategy
-
-**Mobile Adaptations** (Mobile-first approach):
-
-**Typography Scaling**:
-- Hero h1: text-5xl (mobile) → text-7xl (md) → text-8xl (lg)
-- Subheadline: text-base → text-lg → text-xl
-- Section headings: text-4xl → text-5xl
-- Maintain uppercase and tracking at all sizes
-
-**Layout Changes**:
-- Navigation: Hide nav links on < lg, show abbreviated CTA text on < sm
-- Stats: 2x2 grid with borders only on top 2 items (mobile) → 4-column with vertical borders (desktop)
-- All feature/blog/testimonial grids: Single column → 2-column (md) → 3-column (lg)
-- Pricing: Stack vertically → 3-column grid, highlighted card scale only on md+
-- Hero HUD: Hidden on mobile (lg:block)
-- Footer: Stack to single column → 4-column grid
-
-**Maintained Elements**:
-- Scanline overlay (full page)
-- Chamfered corners on all cards
-- Neon glow effects (may reduce intensity on mobile for performance)
-- Grid/circuit backgrounds
-- Monospace typography
-- Terminal aesthetic (>, $, prefixes)
-- Dark color scheme
-
-**Touch Targets**:
-- Minimum 44px height for all interactive elements
-- Adequate spacing between tappable items
-- FAQ accordions with full-width click area
+**Key Adaptations:**
+- Reduce headline sizes: text-[2.75rem] mobile → text-6xl → text-[5.25rem] desktop
+- Maintain generous section padding: py-28 → py-44 (reduce slightly, not dramatically)
+- Hide decorative elements on mobile: rotating rings, complex graphics (use hidden lg:block)
+- Keep gradient accents and color inversions—these define the style
+- Button heights: h-12 to h-14 for primary CTAs (44px-56px touch targets)
 
 ---
 
-## 9. Accessibility
+## Accessibility & Best Practices
 
-**Contrast**: All text meets WCAG AA (accent green on dark bg = 7.5:1 ratio - excellent)
+**Color Contrast:** All text meets WCAG AA. The accent blue (#0052FF) on white background passes at 4.5:1+. Inverted sections use near-white text (#FFFFFF or rgba(255,255,255,0.9)) on deep slate (#0F172A) for maximum contrast.
 
-**Focus States**:
-css
-focus-visible:outline-none
-focus-visible:ring-2
-focus-visible:ring-accent
-focus-visible:ring-offset-2
-focus-visible:ring-offset-background
+**Focus States:**
+- Visible focus rings using ring-2 ring-accent ring-offset-2 with ring-offset-background
+- Focus rings match the gradient accent aesthetic
+- Interactive elements have clear hover/focus differentiation (lift, shadow, color shift)
+- Buttons have active:scale-[0.98] for tactile feedback
 
-Plus add glow effect matching the neon aesthetic.
+**Touch Targets:**
+- Minimum 44px height on all interactive elements
+- Buttons use h-12 (48px) to h-14 (56px) for primary CTAs
+- Adequate spacing between tap targets (gap-4 minimum)
 
-**Reduced Motion**: Respect prefers-reduced-motion - disable glitch animations, keep static chromatic aberration
+**Motion:**
+- Respect prefers-reduced-motion for continuous animations
+- Entrance animations are subtle enough to not cause issues (0.7s duration, 28px vertical movement)
+- No flashing or rapid movements
+- Continuous animations are slow and gentle (4-5s duration, ±10px movement)
 
 ---
 
-## 10. Implementation Notes
+## Implementation Notes
 
-- Use Tailwind arbitrary values [...] extensively for custom shadows and clip-paths
-- CSS variables for colors enable easy theming
-- Scanlines implemented via CSS, not images
-- Glitch animations should be subtle and infrequent (not distracting)
-- Test glow effects on different screens (can look washed out on low contrast displays)
-- Consider GPU performance with multiple box-shadows - use will-change: transform sparingly
+**Component Structure:**
+All components (Button, Card, Input) are built locally using cva and tailwind-merge, following Shadcn API patterns but tailored to this design system.
+
+**CSS Custom Properties:**
+The StyleWrapper component injects all design tokens as CSS custom properties, allowing for consistent theming across all components.
+
+**Font Loading:**
+Fonts are loaded via Google Fonts:
+- Inter: weights 400, 500, 600, 700
+- Calistoga: default weight
+- JetBrains Mono: weights 400, 500
+
+**Animation Library:**
+Framer Motion is used for all entrance animations and continuous motion. Viewport options are set to { once: true, amount: 0.15, margin: "-60px" } for optimal performance and timing.
 </design-system>
 	
-# 待排版的文字
-`,
+# 待排版的文字`,
 	},
 	{
 		id: 'retro',
