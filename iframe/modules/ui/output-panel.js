@@ -23,6 +23,16 @@ const THINK_CLOSE = '</think>';
 const THINK_OPEN_LEN = THINK_OPEN.length; // 6
 const THINK_CLOSE_LEN = THINK_CLOSE.length; // 7
 
+// ========== 最外层代码围栏剥离 ==========
+// LLM 有时会把整段输出用 markdown 代码围栏包起来（开头 ```lang，结尾一行 ```）。
+// 这些围栏本身不是正文，需在 OUT 文本流中剥离，避免污染显示与复制源。
+const FENCE_HEAD_MAX = 32; // ```+语言标签+空白+\n 的安全上界，防缓冲无限增长
+const FENCE_HEAD_LANG_OK = /^`{3}([ \t]*|[a-zA-Z0-9_+\-.]+)$/; // ``` 或 ```html 或 ```c++
+// 尾部收尾围栏「挂起」模式：行首/换行后 1~3 个反引号（半截或完整），可带尾随空白/换行。
+// 挂起 1~2 个反引号是为兼容收尾 ``` 被拆成多片（如 "``"+"`"）的流式场景；
+// 前导 \n 可选，因为正文结尾的换行可能已在上一片输出。
+const FENCE_TAIL_HOLD_RE = /(?:^|\n)`{1,3}[ \t]*\n?$/;
+
 /**
  * 格式化思考耗时（毫秒 → 文本）。
  *  - < 60s：保留 1 位小数，如 "3.2s"
@@ -101,6 +111,11 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 	let pendingTag = ''; // OUT 状态下跨 chunk 的未闭合 HTML 标签起始（<... 等待 >）
 	let currentThinkBody = null; // 当前 think 块的 body 节点（null 表示 OUT）
 
+	// 最外层代码围栏剥离状态（只作用于 OUT 文本流）
+	let fenceHeadBuf = ''; // 开头围栏判定前的挂起缓冲
+	let fenceHeadDone = false; // 开头围栏已剥离或已确认不存在
+	let fenceTailBuf = ''; // 尾部疑似收尾围栏（含半截）的挂起缓冲，跨片拼回重判
+
 	// 思考计时
 	let thinkStartTime = null; // 当前 think 段开始 performance.now() 毫秒
 	let thinkTimer = null; // setInterval 句柄
@@ -122,6 +137,10 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		thinkStartTime = null;
 		currentThinkSummary = null;
 		currentThinkAborted = false;
+		// 重置围栏剥离状态
+		fenceHeadBuf = '';
+		fenceHeadDone = false;
+		fenceTailBuf = '';
 	}
 
 	function updateStatus() {
@@ -166,6 +185,65 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 
 	function flushPendingText(s) {
 		if (!s) return;
+
+		// ===== 最外层代码围栏预处理（只作用于 OUT 段）=====
+		// (A) 拼回上一次挂起的尾部：又来了新内容，与新片一起重判（中途绝不丢内容）
+		if (fenceTailBuf) {
+			s = fenceTailBuf + s;
+			fenceTailBuf = '';
+		}
+
+		// (B) 开头围栏判定
+		if (!fenceHeadDone) {
+			fenceHeadBuf += s;
+			// couldBeFence：当前缓冲仍可能构成 ``` 开头（是 ``` 的前缀，或已含 ```）
+			const couldBeFence = '```'.startsWith(fenceHeadBuf) || fenceHeadBuf.startsWith('```');
+			if (!couldBeFence) {
+				// 不可能是三反引号围栏（如 "`a"、"x..."）→ 整段作为正文放行
+				s = fenceHeadBuf;
+				fenceHeadBuf = '';
+				fenceHeadDone = true;
+			} else if (!fenceHeadBuf.startsWith('```')) {
+				// 还只是 ``` 的前缀（"`" 或 "``"）→ 继续等
+				return;
+			} else {
+				// 已确定以 ``` 开头，需等首个 \n 才能校验语言标签
+				const nl = fenceHeadBuf.indexOf('\n');
+				if (nl === -1) {
+					if (fenceHeadBuf.length > FENCE_HEAD_MAX) {
+						// 迟迟不见 \n 且超长 → 判定不是围栏，放行
+						s = fenceHeadBuf;
+						fenceHeadBuf = '';
+						fenceHeadDone = true;
+					} else {
+						return; // 继续等 \n
+					}
+				} else {
+					const head = fenceHeadBuf.slice(0, nl);
+					if (FENCE_HEAD_LANG_OK.test(head)) {
+						// 确认开头围栏 → 丢弃首行（含 \n），其余为正文
+						s = fenceHeadBuf.slice(nl + 1);
+					} else {
+						// ``` 后跟非法字符 → 不是围栏，整段放行
+						s = fenceHeadBuf;
+					}
+					fenceHeadBuf = '';
+					fenceHeadDone = true;
+				}
+			}
+		}
+
+		// (C) 尾部围栏挂起：末尾若是（半截或完整）收尾围栏，先挂起，留待后续片拼回或流结束裁决
+		if (s) {
+			const m = FENCE_TAIL_HOLD_RE.exec(s);
+			if (m) {
+				fenceTailBuf = s.slice(m.index);
+				s = s.slice(0, m.index);
+			}
+		}
+
+		if (!s) return;
+
 		// 拼接跨 chunk 残留的未闭合 HTML 标签起始
 		const full = pendingTag + s;
 		pendingTag = '';
@@ -310,6 +388,10 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 	}
 
 	function finishStreaming() {
+		// ★ 流已结束：挂起的尾部即最外层收尾围栏，丢弃；防御性清空头部缓冲
+		fenceTailBuf = '';
+		fenceHeadBuf = '';
+		fenceHeadDone = true;
 		// 兜底：流结束若仍在 IN_THINK 状态（没收到 </think>），标记中断
 		if (state === 'IN_THINK') {
 			stopThinkTimer(true);
@@ -355,6 +437,10 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		}
 		// 兜底：流中断时若还在 IN_THINK，标中断；否则安全 no-op
 		stopThinkTimer(state === 'IN_THINK');
+		// ★ 中断：丢弃残留的半截/挂起围栏缓冲，避免半截围栏泄漏
+		fenceHeadBuf = '';
+		fenceHeadDone = true;
+		fenceTailBuf = '';
 		streaming = false;
 		// 流式中断时保留已渲染内容，状态栏标记失败
 		container.classList.add('is-error');
