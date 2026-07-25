@@ -49,6 +49,24 @@ export const THEMES = [
 `,
 	},
 	{
+		id: 'utility-first',
+		name: '实用优先',
+		description: '功能优先的哲学风格，最小化自订CSS并聚焦功能构图',
+		fixedPromptId: 'byPrompt',
+		prompt: `
+		角色设定：你是「实用主义/Utility-first」设计师，强调结构清晰、类名/原子化规则与易维护性，弱化装饰。
+
+场景定位：设计系统样例、后台工具、文档/组件库示例。用户期待干净的网格、明确层级与少量点缀色。
+
+视觉设计理念：以网格/间距为先，颜色限制在中性色 + 1–2 个品牌色；字体、间距、边框、圆角有明确刻度；
+
+材质与质感：纯色块、细分隔线、浅阴影（如 0 2px 8px 10%）；避免过度渐变与纹理。图标保持线性，对齐网格。
+
+整体氛围：理性、工程化、易复用。画面像设计系统示例板，干净且一致。
+
+---`,
+	},
+	{
 		id: 'flat',
 		name: '扁平设计',
 		description: '风格简洁明快，二维几何感强，并运用大胆的色块',
@@ -155,207 +173,529 @@ A geometric sans-serif that mirrors the shapes of the UI.
 </design-system>`,
 	},
 	{
-		id: 'playful-geometric',
-		name: '趣味几何',
-		description: '一种充满活力、能量十足的美学风格，将稳定的结构网格与奇特的几何装饰相结合',
+		id: 'tech',
+		name: '科技风格',
+		description: '专业而不失前卫设计感',
 		fixedPromptId: 'byPrompt',
 		prompt: `<design-system>
-# Playful Geometric Design System
+# Design Style: Minimalist Modern
 
 ## Design Philosophy
 
-**Playful Geometric** is the antidote to sterile, corporate minimalism. It creates an emotional connection through **optimism, clarity, and tactile fun**.
+### Core Principle
 
-The core concept is **"Stable Grid, Wild Decoration"**. The content itself (text, forms) lives in clean, readable areas, but the world around it is alive with movement and shape. It references the **Memphis Group** (80s) but cleans it up for modern digital screens—removing the chaos while keeping the energy.
+**Clarity through structure, character through bold detail.** This design system embraces modern web layouts and dynamic interactions while honoring minimalist foundations. It operates on a fundamental tension: restraint in quantity, confidence in execution. Every element that appears has earned its place—but those elements are executed with deliberate flair and precision.
 
-### The Vibe
-**Friendly. Tactile. Pop. Energetic.**
-It feels like a playground or a well-organized sticker book. It invites clicking. It smiles at you.
+Whitespace is not empty space; it's a precision instrument for directing attention. Motion is not decoration; it's communication. Color is not scattered; it's concentrated into a single, electrifying accent that commands the eye wherever it appears.
 
-### Visual Signatures
-- **Primitive Shapes**: Circles, triangles, squares, pill shapes, and squiggles used as background elements, masks, or icons.
-- **Hard Shadows**: Elements often have a hard, offset drop shadow (no blur) giving a sticker or cut-out paper feel.
-- **Pattern Fills**: Polka dots, grid lines, and diagonal stripes used to fill shapes or backgrounds.
-- **Varied Radii**: Mixing fully rounded corners with sharp ones to create "leaf" shapes or asymmetric blobs.
+### The Visual Vibe
+
+**Professional yet design-forward. Confident and artistic. Refined but alive.**
+
+Imagine the intersection of a high-tech SaaS product's precision with a creative agency's bold portfolio sensibility. This design feels like it was crafted by someone who understands both engineering rigor and artistic expression—someone who knows the rules well enough to break them intentionally.
+
+**Emotional Keywords:**
+- *Confident* — Never apologetic. Elements are sized boldly, colors are vibrant, animations are purposeful.
+- *Sophisticated* — The dual-font typography system, the considered color ratios, the layered shadows all whisper "we sweat the details."
+- *Alive* — Subtle animations, pulsing indicators, floating elements, and hover responses create a sense that the interface is breathing.
+- *Premium* — Generous whitespace, elevated surfaces, and accent-tinted shadows evoke quality and care.
+- *Contemporary* — Gradient text, glassmorphic hints, and asymmetric layouts feel undeniably modern without being trendy.
+
+**What This Design Is NOT:**
+- Not sterile or clinical (despite being "minimal")
+- Not generic or template-like (bold choices prevent this)
+- Not busy or overwhelming (restraint in element count)
+- Not flat or lifeless (texture, shadow, and motion add depth)
+- Not cold or corporate (the warm serif headlines and vibrant blue inject personality)
+
+### The DNA of This Style
+
+#### 1. The Signature Gradient
+
+The Electric Blue gradient (#0052FF → #4D7CFF) is the heartbeat of this design system. It's not just an accent color—it's a visual signature that creates instant recognition.
+
+**Where it appears:**
+- Primary button backgrounds
+- Text highlights on key headline words
+- Icon container backgrounds
+- Featured card border strokes
+- Testimonial accent bars
+- Trend indicator badges
+- CTA section buttons
+- Pricing tier highlights
+
+**Why it works:** A gradient feels more alive than a flat color. The subtle shift from deep Electric Blue to a lighter sky blue creates dimensionality and draws the eye along the element. It signals "this is important" without screaming.
+
+#### 2. Inverted Contrast Sections
+
+Strategic sections flip the color scheme—using the deep slate foreground color as a background with light text. This technique:
+- Creates dramatic visual rhythm as users scroll
+- Prevents the light theme from feeling monotonous
+- Provides natural section breaks without heavy dividers
+- Makes statistics and key metrics feel more impactful
+- Adds sophistication through intentional contrast
+
+**Best used for:** Stats sections, final CTAs, or any content that deserves spotlight emphasis.
+
+#### 3. Animated Depth & Living Elements
+
+This design breathes. Micro-animations and transitions create a sense that the interface is responsive and alive:
+
+- **Pulsing indicators:** Small dots in badges that gently pulse, signaling "live" or "new"
+- **Floating elements:** Cards in the hero that bob gently on a slow sine wave
+- **Rotating decorative rings:** Dashed circles that rotate infinitely at glacial speed (60+ seconds per rotation)
+- **Hover responses:** Elements lift, shadows deepen, icons scale, colors shift
+- **Entrance animations:** Content fades up into view as users scroll, with staggered timing
+
+**The philosophy:** Motion should feel natural, almost subconscious. Users shouldn't think "oh, that's animated"—they should simply feel that the interface is polished and responsive.
+
+#### 4. Sophisticated Dual-Font Typography
+
+The pairing of **Calistoga** (display) with **Inter** (UI/body) creates a memorable typographic identity:
+
+- **Calistoga** is warm, characterful, and slightly playful. Its soft serifs and sturdy construction make headlines feel approachable yet substantial. It's the "personality" voice.
+- **Inter** is clean, highly legible, and professional. It handles the workhorse duties of body text, labels, and UI elements. It's the "clarity" voice.
+
+This pairing creates a conversation between personality and precision—headlines grab attention with character, then body text delivers information with crystal clarity.
+
+**Monospace accents** (JetBrains Mono) appear in section labels and badges, adding a technical, modern touch that reinforces the "high-tech meets high-design" vibe.
+
+#### 5. Texture Over Flatness
+
+Minimalism often fails because it becomes sterile. This design combats flatness through layered texture:
+
+- **Dot patterns:** Subtle radial-gradient dot grids at 2-3% opacity on dark sections
+- **Radial glows:** Large, blurred circles of accent color positioned at section corners, creating ambient warmth
+- **Layered shadows:** Cards don't just have one shadow—they have subtle, diffuse shadows that create realistic depth
+- **Gradient overlays:** Hero sections use radial gradients of the accent color at low opacity for atmospheric depth
+
+These textures are felt more than seen. Users won't consciously notice the dot pattern, but they'll feel that the dark section has "something" that makes it feel richer than a flat color.
+
+#### 6. Asymmetry & Visual Tension
+
+Strict grid alignment is intentionally broken in key moments:
+
+- **Hero layout:** The asymmetric 1.1fr / 0.9fr grid creates visual tension—the text column is subtly dominant
+- **Testimonial offset:** The center card is shifted vertically, breaking the rigid grid rhythm
+- **Pricing elevation:** The highlighted tier floats above its siblings
+- **Benefits visual:** Asymmetric border radii (rounded-tl-[4rem] rounded-br-[4rem]) create organic, memorable shapes
+
+**Why this matters:** Perfect symmetry is predictable. Strategic asymmetry creates visual interest and guides the eye in unexpected ways. It's the difference between "correct" and "designed."
+
+#### 7. The Section Label System
+
+Every major section begins with a consistent badge pattern:
+- Rounded pill shape with subtle accent border and tinted background
+- Small colored dot (optionally animated/pulsing)
+- Uppercase monospace text with wide letter-spacing
+- Positioned above the section headline
+
+This creates a visual rhythm and helps users orient themselves. It also adds a touch of UI sophistication—these feel like carefully designed interface elements, not just text.
+
+### Differentiation: Minimalism With a Pulse
+
+This style refuses to be "just clean." Many minimal designs strip away so much that they become forgettable—white backgrounds, gray text, safe choices. This design takes the opposite approach:
+
+**Minimalism through bold choices, not absence.**
+
+- Where others use subtle gray, we use Electric Blue
+- Where others use flat backgrounds, we use inverted sections and gradient glows
+- Where others use static layouts, we use floating animations and pulsing indicators
+- Where others use one safe font, we use a memorable dual-font pairing
+- Where others center everything, we embrace asymmetry
+
+The result is a design that is unmistakably minimal in its restraint (few colors, generous whitespace, clean lines) but unmistakably bold in its execution (vibrant accent, animated hero, gradient flourishes).
+
+**It's minimalism that makes a statement.**
+
+### Sensory Description
+
+If this design were a physical space, it would be:
+- A bright, airy gallery with white walls and polished concrete floors
+- One wall painted in deep midnight blue, dramatically lit
+- A single piece of art in electric blue, drawing every eye
+- Soft ambient lighting that makes surfaces glow
+- The faint hum of something technological and precise
+- Clean lines everywhere, but one sculptural element with an unexpected curve
+
+If it were music, it would be:
+- Electronic, but warm—not cold synthwave
+- Mostly minimal beats with generous silence
+- One recurring melodic hook in a bright, clear tone
+- Occasional swells that feel like things floating upward
+- Professional enough for a corporate lobby, interesting enough to actually listen to
 
 ---
 
-## Design Token System
+## Design Token System (The DNA)
 
-### Colors (Light Mode)
-A punchy, high-saturation palette anchored by strong neutrals.
+### Color Strategy
 
+**Chromatic Focus:** A warm, near-monochrome palette amplified by a dual-tone accent gradient. The accent colors are used sparingly but with maximum impact—they command attention wherever they appear.
 
-background:        #FFFDF5    // Warm Cream/Off-White (Paper feel)
-foreground:        #1E293B    // Slate 800 (Softer than black)
-muted:             #F1F5F9    // Slate 100
-mutedForeground:   #64748B    // Slate 500
-accent:            #8B5CF6    // Vivid Violet (Primary Brand)
-accentForeground:  #FFFFFF    // White
-secondary:         #F472B6    // Hot Pink (Playful pop)
-tertiary:          #FBBF24    // Amber/Yellow (Optimism)
-quaternary:        #34D399    // Emerald/Mint (Freshness)
-border:            #E2E8F0    // Slate 200
-input:             #FFFFFF    // White
-card:              #FFFFFF    // White
-ring:              #8B5CF6    // Violet Focus
+| Token | Value | Usage & Context |
+|:------|:------|:----------------|
+| background | #FAFAFA | Primary canvas. Warmer off-white that reduces eye strain. |
+| foreground | #0F172A (Slate-900) | Primary text. Deep slate, not pure black. Also used as inverted section backgrounds. |
+| muted | #F1F5F9 (Slate-100) | Secondary surfaces, card backgrounds, subtle fills. |
+| muted-foreground | #64748B (Slate-500) | Secondary text, descriptions, metadata. |
+| accent | #0052FF (Electric Blue) | **Primary action color.** CTAs, links, highlights, icon backgrounds. |
+| accent-secondary | #4D7CFF | Gradient endpoint. Used with accent for gradient effects. |
+| accent-foreground | #FFFFFF | Text on accent backgrounds. Always white. |
+| border | #E2E8F0 (Slate-200) | Subtle structural borders on cards and dividers. |
+| card | #FFFFFF | Elevated surfaces. Pure white for maximum lift. |
+| ring | #0052FF | Focus rings. Matches the primary accent. |
 
+**The Signature Gradient:**
+css
+background: linear-gradient(to right, #0052FF, #4D7CFF);
+/* Or diagonal: */
+background: linear-gradient(135deg, #0052FF, #4D7CFF);
 
-**Usage Rule**: Use accent for primary actions. Use secondary, tertiary, and quaternary rotationally for decorative shapes, icons, or emphasized words to create a "confetti" effect.
-
-### Typography
-
-**Headings**: "Outfit", system-ui, sans-serif
-- A geometric sans with character. Rounded corners on letters make it friendly.
-- **Weights**: Bold (700) or ExtraBold (800).
-
-**Body**: "Plus Jakarta Sans", system-ui, sans-serif
-- Highly legible, modern, geometric but humanist.
-- **Weights**: Regular (400), Medium (500).
-
-**Scale Ratio**: 1.25 (Major Third) - melodic and harmonious.
-
-### Radius & Border
-
-
-radius-sm:   8px
-radius-md:   16px
-radius-lg:   24px
-radius-full: 9999px
-border-width: 2px     // Chunky borders by default
-
-
-**Special "Blob" Radius**: rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-none (Speech bubble style) or rounded-t-full rounded-b-none (Arch).
-
-### Shadows & Effects
-
-**The "Pop" Shadow (Hard Shadow)**:
-
-box-shadow: 4px 4px 0px 0px #1E293B;  // Dark hard shadow
-box-shadow-hover: 6px 6px 0px 0px #1E293B; // Lift effect
-box-shadow-active: 2px 2px 0px 0px #1E293B; // Press effect
-
-No blur. Solid offset colors.
-
-### Textures & Patterns
-- **Dot Grid**: A background of small dots (bg-[url(...)]) in strict formation.
-- **Squiggles**: SVG paths used as section dividers or underlining for headings.
-- **Confetti**: Small SVG shapes (triangles, circles) absolutely positioned behind main content blocks.
+This gradient appears on: primary buttons, featured badges, icon backgrounds, pricing tier borders, testimonial accent bars, trend indicators, and text highlights.
 
 ---
 
-## Component Stylings
+### Typography System
+
+**Font Pairing (Dual-Font System):**
+- **Display Font:** "Calistoga", Georgia, serif — A warm, characterful serif with personality. Used exclusively for h1/h2 headlines to create memorable anchor points.
+- **UI & Body Font:** "Inter", system-ui, sans-serif — Highly legible, clean sans-serif for all body text, UI elements, and smaller headings.
+- **Monospace:** "JetBrains Mono", monospace — For section labels, badges, and technical callouts.
+
+**Type Scale & Usage:**
+
+| Element | Size | Font | Weight | Tracking | Notes |
+|:--------|:-----|:-----|:-------|:---------|:------|
+| Hero Headline | 5xl → 5.25rem | Calistoga | Normal | -0.02em | Tight leading (1.05). Last word gets gradient text treatment. |
+| Section Headlines | 3xl → 3.25rem | Calistoga | Normal | Normal | Leading 1.15. Key word can use gradient text. |
+| Card Titles | lg → 2xl | Inter | Semibold (600) | -0.01em | Tight tracking for density. |
+| Body Text | base → lg | Inter | Normal (400) | Normal | Relaxed line-height (1.625-1.75). |
+| Section Labels | xs (12px) | JetBrains Mono | Normal | 0.15em | UPPERCASE. Used in pill badges with accent dot. |
+
+**Gradient Text Effect (with Enhanced Underline):**
+css
+.gradient-text {
+  background: linear-gradient(to right, #0052FF, #4D7CFF);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient underline bar for hero headline */
+.gradient-underline {
+  position: absolute;
+  bottom: -0.25rem; /* md: -0.5rem */
+  left: 0;
+  height: 0.75rem; /* md: 1rem */
+  width: 100%;
+  border-radius: 0.125rem;
+  background: linear-gradient(to right, rgba(0, 82, 255, 0.15), rgba(77, 124, 255, 0.1));
+}
+
+
+---
+
+### Spacing & Layout
+
+**Core Principle:** Generous, intentional whitespace is a primary design tool—but it's balanced by density within components.
+
+- **Section Spacing:** Large vertical padding (py-28 to py-44) creates a calm, paced scrolling experience.
+- **Container Width:** max-w-6xl (72rem) for primary content. Centered with mx-auto.
+- **Component Density:** Within cards and components, spacing is tighter to create cohesive units that float in the generous section whitespace.
+- **Grid Gaps:** gap-5 to gap-8 between grid items. Slightly tighter than standard to maintain visual cohesion.
+
+**Asymmetry Patterns:**
+- Hero: grid-cols-[1.1fr_0.9fr] — Left-heavy for text dominance
+- Benefits: grid-cols-[1.2fr_0.8fr] — Content over visual
+- Use negative margins and overlapping elements to create Z-depth
+
+---
+
+### Borders, Surfaces & Shadows
+
+**Surfaces:**
+- Cards use pure white (#FFFFFF) with 1px border in border color
+- Elevated cards add shadow-lg or shadow-xl for lift
+- Featured elements use gradient borders (2px stroke effect via nested divs)
+
+**Shadow System:**
+| Token | Value | Usage |
+|:------|:------|:------|
+| shadow-sm | 0 1px 3px rgba(0,0,0,0.06) | Subtle lift |
+| shadow-md | 0 4px 6px rgba(0,0,0,0.07) | Standard cards |
+| shadow-lg | 0 10px 15px rgba(0,0,0,0.08) | Elevated cards |
+| shadow-xl | 0 20px 25px rgba(0,0,0,0.1) | Hero elements |
+| shadow-accent | 0 4px 14px rgba(0,82,255,0.25) | Accent-tinted lift |
+| shadow-accent-lg | 0 8px 24px rgba(0,82,255,0.35) | Featured elements |
+
+**Textures (Critical for Avoiding Flatness):**
+- **Dot Pattern:** radial-gradient(circle, white 1px, transparent 1px) at 32px intervals, opacity: 0.03 — Used on dark inverted sections
+- **Radial Glows:** Large blurred circles (blur-[150px]) of accent color at 3-6% opacity — Positioned at section corners
+- **Gradient Overlays:** Subtle radial-gradient from accent color, 8% opacity — Used in hero graphic backgrounds
+
+---
+
+## Component Styling & Interactions
 
 ### Buttons
 
-**Primary Button ("The Candy Button")**:
+**Primary Button:**
+- Background: Gradient from accent to accent-secondary (bg-gradient-to-r from-[var(--accent)] to-[#4D7CFF])
+- Text: White, medium weight
+- Shadow: shadow-sm default, shadow-accent on hover (accent-tinted)
+- Border-radius: rounded-xl (12px)
+- Hover: Lifts up (-translate-y-0.5), shadow-accent-lg, brightness increase (brightness-110), arrow icon translates right
+- Active: Slight scale down (scale-[0.98]) for tactile feedback
 
-- Bg: accent (#8B5CF6)
-- Text: white, font-weight: 700
-- Radius: rounded-full (Pill)
-- Border: 2px solid #1E293B (Dark border around color)
-- Shadow: 4px 4px 0px #1E293B (Hard shadow)
-- Hover: translate-x-[-2px] translate-y-[-2px], shadow extends to 6px 6px
-- Active: translate-x-[2px] translate-y-[2px], shadow shrinks to 2px 2px
-- Icon: ArrowRight, circular background (white) inside button
-
-
-**Secondary Button**:
-
-- Bg: transparent
+**Secondary/Outline Button:**
+- Background: Transparent → muted on hover
+- Border: 1px in border color
 - Text: foreground
-- Border: 2px solid #1E293B
-- Radius: rounded-full
-- Shadow: none
-- Hover: bg-tertiary (#FBBF24) - Fills with yellow on hover
+- Hover: Border shifts to accent/30, shadow appears
 
+**Ghost Button:**
+- No background or border
+- Text: muted-foreground → foreground on hover
+
+**Animation:** All buttons have transition-all duration-200. Subtle upward translation on hover (-translate-y-0.5). Arrow icons translate right on hover (group-hover:translate-x-1).
+
+---
 
 ### Cards
 
-**The "Sticker" Card**:
+**Standard Card:**
+- Background: card (white)
+- Border: 1px in border color
+- Border-radius: rounded-xl (12px) or rounded-2xl (16px)
+- Shadow: shadow-md default, shadow-xl on hover
+- Padding: p-6 to p-10 depending on prominence
 
-- Bg: white
-- Border: 2px solid #1E293B
-- Radius: rounded-xl
-- Shadow: 8px 8px 0px #E2E8F0 (Soft hard shadow) or #F472B6 (Pink shadow for featured)
-- Hover: Rotate -1deg, Scale 1.02 (Wiggle effect)
-- Title: Bold Outfit font
-- Icon: Floating circle div with centered icon, sitting half-in/half-out of the top border.
+**Elevated Card:**
+- Adds stronger shadow and optional accent tint
+- Used for featured items, highlighted pricing tiers
 
+**Hover Effects:**
+- Gradient overlay fades in: bg-gradient-to-br from-accent/[0.03] to-transparent
+- Shadow deepens
+- Optional icon scale: group-hover:scale-110
 
-### Inputs
-
-
-- Bg: white
-- Border: 2px solid #CBD5E1
-- Radius: rounded-lg
-- Text: foreground
-- Shadow: 4px 4px 0px transparent (hidden initially)
-- Focus: Border accent, Shadow 4px 4px 0px accent (Hard color shadow on focus)
-- Label: Bold, uppercase, small tracking-wide.
+**Featured Card (Gradient Border):**
+jsx
+<div className="rounded-xl bg-gradient-to-br from-accent via-accent-secondary to-accent p-[2px]">
+  <div className="h-full w-full rounded-[calc(12px-2px)] bg-card">
+    {/* content */}
+  </div>
+</div>
 
 
 ---
 
-## Layout Strategy
+### Inputs
 
-### General
-- **Container**: max-w-6xl (Generous width).
-- **Spacing**: py-24 (96px). Spacious but not empty; filled with patterns.
-- **Grid**: 12-column logic, but grouped into big blocks (6/6 or 4/4/4).
+- Height: h-12 to h-14
+- Border: 1px in border color
+- Border-radius: rounded-lg or rounded-xl
+- Background: Transparent or very subtle muted/10
+- Focus: ring-2 ring-accent ring-offset-2
+- Placeholder: text-muted-foreground/50
 
-### Unique Section Layouts
-1.  **Hero**:
-    - Text left, Image right.
-    - **Decoration**: A massive yellow circle behind the text. A dotted pattern behind the image. The image itself has a "blob" mask (CSS clip-path or border-radius manipulation).
-2.  **Features**:
-    - Grid of 3.
-    - **Decoration**: Each card is connected by a dashed SVG line drawn in the background.
-    - Alternating colors for card headers (Violet, Pink, Yellow).
-3.  **Pricing**:
-    - The middle card is scaled up (1.1) and has a massive yellow star badge "MOST POPULAR" rotated 15deg.
+---
+
+### Section Labels (Badges)
+
+A consistent badge pattern appears at the start of each section:
+jsx
+<div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-accent/5 px-5 py-2">
+  <span className="h-2 w-2 rounded-full bg-accent" /> {/* Can be animated/pulsing */}
+  <span className="font-mono text-xs uppercase tracking-[0.15em] text-accent">
+    Section Name
+  </span>
+</div>
+
+
+---
+
+## The "Bold Factor" (Signature Elements)
+
+These elements define this implementation and prevent generic output:
+
+1. **Gradient Text Highlights:** Key words in headlines use the signature gradient as text color via bg-clip-text.
+
+2. **Inverted Sections:** At least one section uses bg-foreground text-background with dot pattern texture for dramatic contrast.
+
+3. **Animated Hero Graphic:** Abstract generative composition with:
+   - Rotating outer ring (animate with 60s duration, linear)
+   - Floating cards with staggered y animations (5s and 4s durations, ±10px movement)
+   - Geometric shapes (circles, rounded rectangles, gradient fills)
+   - Decorative dot grid (3x3)
+   - Corner accent block in solid accent with shadow
+
+4. **Gradient Icon Backgrounds:** Feature icons use full gradient backgrounds (from-accent to-accent-secondary) rather than translucent fills.
+
+5. **Gradient Border Effects:** Highlighted elements (pricing tiers, featured cards) use the 2px gradient stroke technique.
+
+6. **Large Decorative Elements:** Quote marks at 120px, step numbers at text-4xl, trend arrows in badges.
+
+7. **Pulsing Indicators:** Animated dots in badges using scale/opacity keyframes.
+
+8. **Arrow Connectors:** Timeline steps connected by small accent-colored circular badges with arrow icons.
 
 ---
 
 ## Effects & Animation
 
-**Feel**: Bouncy, Elastic, Fun.
+**Motion Philosophy:** Smooth, confident, and purposeful. Animations enhance understanding and add delight without being distracting. All motion follows natural easing curves.
 
-- **Hover**: transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] (Overshoot/Bounciness).
-- **Entrance**: Elements shouldn't just fade in; they should **pop** in (Scale 0->1 with bounce).
-- **Marquee**: Use infinite scrolling text for client logos or keywords.
-- **Wiggle**: Keyframe animation rotate: 0deg -> 3deg -> -3deg -> 0deg on hover for icons.
+**Transition Defaults:**
+- Standard: transition-all duration-200 ease-out
+- Entrance: duration-700 with stagger (0.1s delay between children)
+- Hover lifts: duration-300
+- Button active: duration-200 with scale down
 
----
+**Entrance Animations (Framer Motion):**
+js
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
-## Iconography
+const fadeInUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easeOut } }
+};
 
-**Lucide React** settings:
-- **Stroke Width**: 2.5px (Bold/Chunky).
-- **Style**: Round line caps, round line joins.
-- **Color**: Often white inside a colored circle, or the dark foreground color.
-- **Usage**: Enclosed in shapes. Never floating alone. A "Check" icon isn't just a check; it's a check inside a green circle.
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.7, ease: easeOut } }
+};
+
+const stagger = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
+};
+
+
+**Continuous Animations:**
+- Rotating ring: 60s linear infinite rotation (hero graphic)
+- Floating cards: 4-5s ease-in-out infinite y-axis bobbing (±10px amplitude)
+- Pulsing dot: 2s infinite scale/opacity pulse (scale: [1, 1.3, 1], opacity: [1, 0.7, 1])
+- Activity indicators: 3s infinite scale/opacity pulse (subtle)
 
 ---
 
 ## Responsive Strategy
 
-- **Mobile**:
-  - Stack everything.
-  - Reduce "pop" shadows to 2px to save space.
-  - Turn horizontal squiggle lines into vertical dividers.
-  - Keep buttons big and tappable (min 48px height).
-  - Hide complex background floating shapes that might overlap text.
+**Breakpoint Philosophy:** Mobile layouts simplify structure but maintain the bold aesthetic. Touch targets are 44px+ minimum.
+
+- **Hero:** Single column. Hide abstract graphic on small screens. Stack CTAs vertically with full width (w-full sm:w-auto).
+- **Stats:** 2 columns on mobile → 4 columns on desktop with vertical dividers hidden on mobile
+- **Features:** 1 column → 2 columns (md) → 3 columns (lg) with first card spanning on larger screens
+- **How It Works:** Vertical stack on mobile, horizontal timeline with connecting line on desktop (md+)
+- **Pricing:** Stack vertically, highlighted tier maintains elevation and gradient border
+- **Testimonials:** Stack vertically, center card offset removed on mobile
+- **Final CTA:** Input and button stack vertically on mobile, horizontal on sm+, button goes full width on mobile
+
+**Key Adaptations:**
+- Reduce headline sizes: text-[2.75rem] mobile → text-6xl → text-[5.25rem] desktop
+- Maintain generous section padding: py-28 → py-44 (reduce slightly, not dramatically)
+- Hide decorative elements on mobile: rotating rings, complex graphics (use hidden lg:block)
+- Keep gradient accents and color inversions—these define the style
+- Button heights: h-12 to h-14 for primary CTAs (44px-56px touch targets)
 
 ---
 
 ## Accessibility & Best Practices
 
-- **Contrast**: The text is slate-800 on off-white/white, which is AAA.
-- **Color**: Never rely *only* on color. Use shapes and text labels.
-- **Motion**: Respect prefers-reduced-motion. Disable the "bounce" and "wiggle" effects if preferred.
-- **Focus**: The focus state is high-contrast (thick colored border + hard shadow).
-</design-system>`,
+**Color Contrast:** All text meets WCAG AA. The accent blue (#0052FF) on white background passes at 4.5:1+. Inverted sections use near-white text (#FFFFFF or rgba(255,255,255,0.9)) on deep slate (#0F172A) for maximum contrast.
+
+**Focus States:**
+- Visible focus rings using ring-2 ring-accent ring-offset-2 with ring-offset-background
+- Focus rings match the gradient accent aesthetic
+- Interactive elements have clear hover/focus differentiation (lift, shadow, color shift)
+- Buttons have active:scale-[0.98] for tactile feedback
+
+**Touch Targets:**
+- Minimum 44px height on all interactive elements
+- Buttons use h-12 (48px) to h-14 (56px) for primary CTAs
+- Adequate spacing between tap targets (gap-4 minimum)
+
+**Motion:**
+- Respect prefers-reduced-motion for continuous animations
+- Entrance animations are subtle enough to not cause issues (0.7s duration, 28px vertical movement)
+- No flashing or rapid movements
+- Continuous animations are slow and gentle (4-5s duration, ±10px movement)
+
+---
+
+## Implementation Notes
+
+**Component Structure:**
+All components (Button, Card, Input) are built locally using cva and tailwind-merge, following Shadcn API patterns but tailored to this design system.
+
+**CSS Custom Properties:**
+The StyleWrapper component injects all design tokens as CSS custom properties, allowing for consistent theming across all components.
+
+**Font Loading:**
+Fonts are loaded via Google Fonts:
+- Inter: weights 400, 500, 600, 700
+- Calistoga: default weight
+- JetBrains Mono: weights 400, 500
+
+**Animation Library:**
+Framer Motion is used for all entrance animations and continuous motion. Viewport options are set to { once: true, amount: 0.15, margin: "-60px" } for optimal performance and timing.
+</design-system>
+	
+# 待排版的文字`,
+	},
+	{
+		id: 'comic',
+		name: '漫画风格',
+		description: '经典美式漫画风格，采用分格布局、动作线条和对话气泡',
+		fixedPromptId: 'byPrompt',
+		prompt: `你是一位精通漫画书视觉语言的UI设计师，深受杰克·科比、斯坦·李时代漫威和DC漫画的影响。
+
+**设计特点**：
+漫画书风格强调动态、戏剧性和叙事感，通过分格、动作线和夸张的视觉效果讲述故事。
+
+**色彩体系**：
+- CMYK印刷色：鲜艳的红、蓝、黄、绿
+- 主色：漫画红(#E23636)、英雄蓝(#1E90FF)、警示黄(#FFD700)
+- 背景：纸张白(#FFFEF0)或深灰(#2C2C2C)
+- 轮廓：纯黑(#000000)，粗边框
+
+**分格布局**：
+- 不规则分格：倾斜、不与文字重叠、破框
+- 动态构图：对角线、透视夸张
+- 留白控制叙事节奏
+- 关键时刻使用大分格或跨页
+
+**视觉元素**：
+- 粗黑轮廓线：2-4px的实心边框
+- 动作线：放射状速度线表示运动
+- 对话气泡：带尾巴的云朵状或椭圆形
+- 思考气泡：小圆点连接的云形
+- 音效文字：BOOM! POW! CRASH! 风格化字母
+- 半色调点阵：阴影和过渡区域
+- 爆炸图形：锯齿状星形
+
+**排版**：
+- 漫画字体：手绘风格的大写字母
+- 音效字体：粗体、倾斜、有阴影
+- 标题文字：立体效果、多层阴影
+- 对话文字：清晰易读
+
+**效果技巧**：
+- CSS clip-path创建不规则分格
+- transform: skew()制造动态感
+- 重复圆点背景模拟印刷效果
+- text-shadow堆叠创造立体字
+
+**交互反馈**：
+- 分格翻转或缩放动画
+- 元素从画框外飞入
+- 点击时出现爆炸效果
+- 悬停时动作线动画
+
+**氛围**：
+漫画书风格传达活力、冒险和英雄主义。它适合娱乐产品、游戏平台、年轻品牌和任何需要充满能量的视觉表达的产品。让用户感觉自己是故事的一部分，正在经历一场冒险。`,
 	},
 	{
 		id: 'bauhaus',
@@ -1055,479 +1395,6 @@ This style should feel approachable, creative, human-centered, and fun. It lower
 </design-system>`,
 	},
 	{
-		id: 'tech',
-		name: '科技风格',
-		description: '专业而不失前卫设计感',
-		fixedPromptId: 'byPrompt',
-		prompt: `<design-system>
-# Design Style: Minimalist Modern
-
-## Design Philosophy
-
-### Core Principle
-
-**Clarity through structure, character through bold detail.** This design system embraces modern web layouts and dynamic interactions while honoring minimalist foundations. It operates on a fundamental tension: restraint in quantity, confidence in execution. Every element that appears has earned its place—but those elements are executed with deliberate flair and precision.
-
-Whitespace is not empty space; it's a precision instrument for directing attention. Motion is not decoration; it's communication. Color is not scattered; it's concentrated into a single, electrifying accent that commands the eye wherever it appears.
-
-### The Visual Vibe
-
-**Professional yet design-forward. Confident and artistic. Refined but alive.**
-
-Imagine the intersection of a high-tech SaaS product's precision with a creative agency's bold portfolio sensibility. This design feels like it was crafted by someone who understands both engineering rigor and artistic expression—someone who knows the rules well enough to break them intentionally.
-
-**Emotional Keywords:**
-- *Confident* — Never apologetic. Elements are sized boldly, colors are vibrant, animations are purposeful.
-- *Sophisticated* — The dual-font typography system, the considered color ratios, the layered shadows all whisper "we sweat the details."
-- *Alive* — Subtle animations, pulsing indicators, floating elements, and hover responses create a sense that the interface is breathing.
-- *Premium* — Generous whitespace, elevated surfaces, and accent-tinted shadows evoke quality and care.
-- *Contemporary* — Gradient text, glassmorphic hints, and asymmetric layouts feel undeniably modern without being trendy.
-
-**What This Design Is NOT:**
-- Not sterile or clinical (despite being "minimal")
-- Not generic or template-like (bold choices prevent this)
-- Not busy or overwhelming (restraint in element count)
-- Not flat or lifeless (texture, shadow, and motion add depth)
-- Not cold or corporate (the warm serif headlines and vibrant blue inject personality)
-
-### The DNA of This Style
-
-#### 1. The Signature Gradient
-
-The Electric Blue gradient (#0052FF → #4D7CFF) is the heartbeat of this design system. It's not just an accent color—it's a visual signature that creates instant recognition.
-
-**Where it appears:**
-- Primary button backgrounds
-- Text highlights on key headline words
-- Icon container backgrounds
-- Featured card border strokes
-- Testimonial accent bars
-- Trend indicator badges
-- CTA section buttons
-- Pricing tier highlights
-
-**Why it works:** A gradient feels more alive than a flat color. The subtle shift from deep Electric Blue to a lighter sky blue creates dimensionality and draws the eye along the element. It signals "this is important" without screaming.
-
-#### 2. Inverted Contrast Sections
-
-Strategic sections flip the color scheme—using the deep slate foreground color as a background with light text. This technique:
-- Creates dramatic visual rhythm as users scroll
-- Prevents the light theme from feeling monotonous
-- Provides natural section breaks without heavy dividers
-- Makes statistics and key metrics feel more impactful
-- Adds sophistication through intentional contrast
-
-**Best used for:** Stats sections, final CTAs, or any content that deserves spotlight emphasis.
-
-#### 3. Animated Depth & Living Elements
-
-This design breathes. Micro-animations and transitions create a sense that the interface is responsive and alive:
-
-- **Pulsing indicators:** Small dots in badges that gently pulse, signaling "live" or "new"
-- **Floating elements:** Cards in the hero that bob gently on a slow sine wave
-- **Rotating decorative rings:** Dashed circles that rotate infinitely at glacial speed (60+ seconds per rotation)
-- **Hover responses:** Elements lift, shadows deepen, icons scale, colors shift
-- **Entrance animations:** Content fades up into view as users scroll, with staggered timing
-
-**The philosophy:** Motion should feel natural, almost subconscious. Users shouldn't think "oh, that's animated"—they should simply feel that the interface is polished and responsive.
-
-#### 4. Sophisticated Dual-Font Typography
-
-The pairing of **Calistoga** (display) with **Inter** (UI/body) creates a memorable typographic identity:
-
-- **Calistoga** is warm, characterful, and slightly playful. Its soft serifs and sturdy construction make headlines feel approachable yet substantial. It's the "personality" voice.
-- **Inter** is clean, highly legible, and professional. It handles the workhorse duties of body text, labels, and UI elements. It's the "clarity" voice.
-
-This pairing creates a conversation between personality and precision—headlines grab attention with character, then body text delivers information with crystal clarity.
-
-**Monospace accents** (JetBrains Mono) appear in section labels and badges, adding a technical, modern touch that reinforces the "high-tech meets high-design" vibe.
-
-#### 5. Texture Over Flatness
-
-Minimalism often fails because it becomes sterile. This design combats flatness through layered texture:
-
-- **Dot patterns:** Subtle radial-gradient dot grids at 2-3% opacity on dark sections
-- **Radial glows:** Large, blurred circles of accent color positioned at section corners, creating ambient warmth
-- **Layered shadows:** Cards don't just have one shadow—they have subtle, diffuse shadows that create realistic depth
-- **Gradient overlays:** Hero sections use radial gradients of the accent color at low opacity for atmospheric depth
-
-These textures are felt more than seen. Users won't consciously notice the dot pattern, but they'll feel that the dark section has "something" that makes it feel richer than a flat color.
-
-#### 6. Asymmetry & Visual Tension
-
-Strict grid alignment is intentionally broken in key moments:
-
-- **Hero layout:** The asymmetric 1.1fr / 0.9fr grid creates visual tension—the text column is subtly dominant
-- **Testimonial offset:** The center card is shifted vertically, breaking the rigid grid rhythm
-- **Pricing elevation:** The highlighted tier floats above its siblings
-- **Benefits visual:** Asymmetric border radii (rounded-tl-[4rem] rounded-br-[4rem]) create organic, memorable shapes
-
-**Why this matters:** Perfect symmetry is predictable. Strategic asymmetry creates visual interest and guides the eye in unexpected ways. It's the difference between "correct" and "designed."
-
-#### 7. The Section Label System
-
-Every major section begins with a consistent badge pattern:
-- Rounded pill shape with subtle accent border and tinted background
-- Small colored dot (optionally animated/pulsing)
-- Uppercase monospace text with wide letter-spacing
-- Positioned above the section headline
-
-This creates a visual rhythm and helps users orient themselves. It also adds a touch of UI sophistication—these feel like carefully designed interface elements, not just text.
-
-### Differentiation: Minimalism With a Pulse
-
-This style refuses to be "just clean." Many minimal designs strip away so much that they become forgettable—white backgrounds, gray text, safe choices. This design takes the opposite approach:
-
-**Minimalism through bold choices, not absence.**
-
-- Where others use subtle gray, we use Electric Blue
-- Where others use flat backgrounds, we use inverted sections and gradient glows
-- Where others use static layouts, we use floating animations and pulsing indicators
-- Where others use one safe font, we use a memorable dual-font pairing
-- Where others center everything, we embrace asymmetry
-
-The result is a design that is unmistakably minimal in its restraint (few colors, generous whitespace, clean lines) but unmistakably bold in its execution (vibrant accent, animated hero, gradient flourishes).
-
-**It's minimalism that makes a statement.**
-
-### Sensory Description
-
-If this design were a physical space, it would be:
-- A bright, airy gallery with white walls and polished concrete floors
-- One wall painted in deep midnight blue, dramatically lit
-- A single piece of art in electric blue, drawing every eye
-- Soft ambient lighting that makes surfaces glow
-- The faint hum of something technological and precise
-- Clean lines everywhere, but one sculptural element with an unexpected curve
-
-If it were music, it would be:
-- Electronic, but warm—not cold synthwave
-- Mostly minimal beats with generous silence
-- One recurring melodic hook in a bright, clear tone
-- Occasional swells that feel like things floating upward
-- Professional enough for a corporate lobby, interesting enough to actually listen to
-
----
-
-## Design Token System (The DNA)
-
-### Color Strategy
-
-**Chromatic Focus:** A warm, near-monochrome palette amplified by a dual-tone accent gradient. The accent colors are used sparingly but with maximum impact—they command attention wherever they appear.
-
-| Token | Value | Usage & Context |
-|:------|:------|:----------------|
-| background | #FAFAFA | Primary canvas. Warmer off-white that reduces eye strain. |
-| foreground | #0F172A (Slate-900) | Primary text. Deep slate, not pure black. Also used as inverted section backgrounds. |
-| muted | #F1F5F9 (Slate-100) | Secondary surfaces, card backgrounds, subtle fills. |
-| muted-foreground | #64748B (Slate-500) | Secondary text, descriptions, metadata. |
-| accent | #0052FF (Electric Blue) | **Primary action color.** CTAs, links, highlights, icon backgrounds. |
-| accent-secondary | #4D7CFF | Gradient endpoint. Used with accent for gradient effects. |
-| accent-foreground | #FFFFFF | Text on accent backgrounds. Always white. |
-| border | #E2E8F0 (Slate-200) | Subtle structural borders on cards and dividers. |
-| card | #FFFFFF | Elevated surfaces. Pure white for maximum lift. |
-| ring | #0052FF | Focus rings. Matches the primary accent. |
-
-**The Signature Gradient:**
-css
-background: linear-gradient(to right, #0052FF, #4D7CFF);
-/* Or diagonal: */
-background: linear-gradient(135deg, #0052FF, #4D7CFF);
-
-This gradient appears on: primary buttons, featured badges, icon backgrounds, pricing tier borders, testimonial accent bars, trend indicators, and text highlights.
-
----
-
-### Typography System
-
-**Font Pairing (Dual-Font System):**
-- **Display Font:** "Calistoga", Georgia, serif — A warm, characterful serif with personality. Used exclusively for h1/h2 headlines to create memorable anchor points.
-- **UI & Body Font:** "Inter", system-ui, sans-serif — Highly legible, clean sans-serif for all body text, UI elements, and smaller headings.
-- **Monospace:** "JetBrains Mono", monospace — For section labels, badges, and technical callouts.
-
-**Type Scale & Usage:**
-
-| Element | Size | Font | Weight | Tracking | Notes |
-|:--------|:-----|:-----|:-------|:---------|:------|
-| Hero Headline | 5xl → 5.25rem | Calistoga | Normal | -0.02em | Tight leading (1.05). Last word gets gradient text treatment. |
-| Section Headlines | 3xl → 3.25rem | Calistoga | Normal | Normal | Leading 1.15. Key word can use gradient text. |
-| Card Titles | lg → 2xl | Inter | Semibold (600) | -0.01em | Tight tracking for density. |
-| Body Text | base → lg | Inter | Normal (400) | Normal | Relaxed line-height (1.625-1.75). |
-| Section Labels | xs (12px) | JetBrains Mono | Normal | 0.15em | UPPERCASE. Used in pill badges with accent dot. |
-
-**Gradient Text Effect (with Enhanced Underline):**
-css
-.gradient-text {
-  background: linear-gradient(to right, #0052FF, #4D7CFF);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Gradient underline bar for hero headline */
-.gradient-underline {
-  position: absolute;
-  bottom: -0.25rem; /* md: -0.5rem */
-  left: 0;
-  height: 0.75rem; /* md: 1rem */
-  width: 100%;
-  border-radius: 0.125rem;
-  background: linear-gradient(to right, rgba(0, 82, 255, 0.15), rgba(77, 124, 255, 0.1));
-}
-
-
----
-
-### Spacing & Layout
-
-**Core Principle:** Generous, intentional whitespace is a primary design tool—but it's balanced by density within components.
-
-- **Section Spacing:** Large vertical padding (py-28 to py-44) creates a calm, paced scrolling experience.
-- **Container Width:** max-w-6xl (72rem) for primary content. Centered with mx-auto.
-- **Component Density:** Within cards and components, spacing is tighter to create cohesive units that float in the generous section whitespace.
-- **Grid Gaps:** gap-5 to gap-8 between grid items. Slightly tighter than standard to maintain visual cohesion.
-
-**Asymmetry Patterns:**
-- Hero: grid-cols-[1.1fr_0.9fr] — Left-heavy for text dominance
-- Benefits: grid-cols-[1.2fr_0.8fr] — Content over visual
-- Use negative margins and overlapping elements to create Z-depth
-
----
-
-### Borders, Surfaces & Shadows
-
-**Surfaces:**
-- Cards use pure white (#FFFFFF) with 1px border in border color
-- Elevated cards add shadow-lg or shadow-xl for lift
-- Featured elements use gradient borders (2px stroke effect via nested divs)
-
-**Shadow System:**
-| Token | Value | Usage |
-|:------|:------|:------|
-| shadow-sm | 0 1px 3px rgba(0,0,0,0.06) | Subtle lift |
-| shadow-md | 0 4px 6px rgba(0,0,0,0.07) | Standard cards |
-| shadow-lg | 0 10px 15px rgba(0,0,0,0.08) | Elevated cards |
-| shadow-xl | 0 20px 25px rgba(0,0,0,0.1) | Hero elements |
-| shadow-accent | 0 4px 14px rgba(0,82,255,0.25) | Accent-tinted lift |
-| shadow-accent-lg | 0 8px 24px rgba(0,82,255,0.35) | Featured elements |
-
-**Textures (Critical for Avoiding Flatness):**
-- **Dot Pattern:** radial-gradient(circle, white 1px, transparent 1px) at 32px intervals, opacity: 0.03 — Used on dark inverted sections
-- **Radial Glows:** Large blurred circles (blur-[150px]) of accent color at 3-6% opacity — Positioned at section corners
-- **Gradient Overlays:** Subtle radial-gradient from accent color, 8% opacity — Used in hero graphic backgrounds
-
----
-
-## Component Styling & Interactions
-
-### Buttons
-
-**Primary Button:**
-- Background: Gradient from accent to accent-secondary (bg-gradient-to-r from-[var(--accent)] to-[#4D7CFF])
-- Text: White, medium weight
-- Shadow: shadow-sm default, shadow-accent on hover (accent-tinted)
-- Border-radius: rounded-xl (12px)
-- Hover: Lifts up (-translate-y-0.5), shadow-accent-lg, brightness increase (brightness-110), arrow icon translates right
-- Active: Slight scale down (scale-[0.98]) for tactile feedback
-
-**Secondary/Outline Button:**
-- Background: Transparent → muted on hover
-- Border: 1px in border color
-- Text: foreground
-- Hover: Border shifts to accent/30, shadow appears
-
-**Ghost Button:**
-- No background or border
-- Text: muted-foreground → foreground on hover
-
-**Animation:** All buttons have transition-all duration-200. Subtle upward translation on hover (-translate-y-0.5). Arrow icons translate right on hover (group-hover:translate-x-1).
-
----
-
-### Cards
-
-**Standard Card:**
-- Background: card (white)
-- Border: 1px in border color
-- Border-radius: rounded-xl (12px) or rounded-2xl (16px)
-- Shadow: shadow-md default, shadow-xl on hover
-- Padding: p-6 to p-10 depending on prominence
-
-**Elevated Card:**
-- Adds stronger shadow and optional accent tint
-- Used for featured items, highlighted pricing tiers
-
-**Hover Effects:**
-- Gradient overlay fades in: bg-gradient-to-br from-accent/[0.03] to-transparent
-- Shadow deepens
-- Optional icon scale: group-hover:scale-110
-
-**Featured Card (Gradient Border):**
-jsx
-<div className="rounded-xl bg-gradient-to-br from-accent via-accent-secondary to-accent p-[2px]">
-  <div className="h-full w-full rounded-[calc(12px-2px)] bg-card">
-    {/* content */}
-  </div>
-</div>
-
-
----
-
-### Inputs
-
-- Height: h-12 to h-14
-- Border: 1px in border color
-- Border-radius: rounded-lg or rounded-xl
-- Background: Transparent or very subtle muted/10
-- Focus: ring-2 ring-accent ring-offset-2
-- Placeholder: text-muted-foreground/50
-
----
-
-### Section Labels (Badges)
-
-A consistent badge pattern appears at the start of each section:
-jsx
-<div className="inline-flex items-center gap-3 rounded-full border border-accent/30 bg-accent/5 px-5 py-2">
-  <span className="h-2 w-2 rounded-full bg-accent" /> {/* Can be animated/pulsing */}
-  <span className="font-mono text-xs uppercase tracking-[0.15em] text-accent">
-    Section Name
-  </span>
-</div>
-
-
----
-
-## The "Bold Factor" (Signature Elements)
-
-These elements define this implementation and prevent generic output:
-
-1. **Gradient Text Highlights:** Key words in headlines use the signature gradient as text color via bg-clip-text.
-
-2. **Inverted Sections:** At least one section uses bg-foreground text-background with dot pattern texture for dramatic contrast.
-
-3. **Animated Hero Graphic:** Abstract generative composition with:
-   - Rotating outer ring (animate with 60s duration, linear)
-   - Floating cards with staggered y animations (5s and 4s durations, ±10px movement)
-   - Geometric shapes (circles, rounded rectangles, gradient fills)
-   - Decorative dot grid (3x3)
-   - Corner accent block in solid accent with shadow
-
-4. **Gradient Icon Backgrounds:** Feature icons use full gradient backgrounds (from-accent to-accent-secondary) rather than translucent fills.
-
-5. **Gradient Border Effects:** Highlighted elements (pricing tiers, featured cards) use the 2px gradient stroke technique.
-
-6. **Large Decorative Elements:** Quote marks at 120px, step numbers at text-4xl, trend arrows in badges.
-
-7. **Pulsing Indicators:** Animated dots in badges using scale/opacity keyframes.
-
-8. **Arrow Connectors:** Timeline steps connected by small accent-colored circular badges with arrow icons.
-
----
-
-## Effects & Animation
-
-**Motion Philosophy:** Smooth, confident, and purposeful. Animations enhance understanding and add delight without being distracting. All motion follows natural easing curves.
-
-**Transition Defaults:**
-- Standard: transition-all duration-200 ease-out
-- Entrance: duration-700 with stagger (0.1s delay between children)
-- Hover lifts: duration-300
-- Button active: duration-200 with scale down
-
-**Entrance Animations (Framer Motion):**
-js
-const easeOut = [0.16, 1, 0.3, 1] as const;
-
-const fadeInUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easeOut } }
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.7, ease: easeOut } }
-};
-
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } }
-};
-
-
-**Continuous Animations:**
-- Rotating ring: 60s linear infinite rotation (hero graphic)
-- Floating cards: 4-5s ease-in-out infinite y-axis bobbing (±10px amplitude)
-- Pulsing dot: 2s infinite scale/opacity pulse (scale: [1, 1.3, 1], opacity: [1, 0.7, 1])
-- Activity indicators: 3s infinite scale/opacity pulse (subtle)
-
----
-
-## Responsive Strategy
-
-**Breakpoint Philosophy:** Mobile layouts simplify structure but maintain the bold aesthetic. Touch targets are 44px+ minimum.
-
-- **Hero:** Single column. Hide abstract graphic on small screens. Stack CTAs vertically with full width (w-full sm:w-auto).
-- **Stats:** 2 columns on mobile → 4 columns on desktop with vertical dividers hidden on mobile
-- **Features:** 1 column → 2 columns (md) → 3 columns (lg) with first card spanning on larger screens
-- **How It Works:** Vertical stack on mobile, horizontal timeline with connecting line on desktop (md+)
-- **Pricing:** Stack vertically, highlighted tier maintains elevation and gradient border
-- **Testimonials:** Stack vertically, center card offset removed on mobile
-- **Final CTA:** Input and button stack vertically on mobile, horizontal on sm+, button goes full width on mobile
-
-**Key Adaptations:**
-- Reduce headline sizes: text-[2.75rem] mobile → text-6xl → text-[5.25rem] desktop
-- Maintain generous section padding: py-28 → py-44 (reduce slightly, not dramatically)
-- Hide decorative elements on mobile: rotating rings, complex graphics (use hidden lg:block)
-- Keep gradient accents and color inversions—these define the style
-- Button heights: h-12 to h-14 for primary CTAs (44px-56px touch targets)
-
----
-
-## Accessibility & Best Practices
-
-**Color Contrast:** All text meets WCAG AA. The accent blue (#0052FF) on white background passes at 4.5:1+. Inverted sections use near-white text (#FFFFFF or rgba(255,255,255,0.9)) on deep slate (#0F172A) for maximum contrast.
-
-**Focus States:**
-- Visible focus rings using ring-2 ring-accent ring-offset-2 with ring-offset-background
-- Focus rings match the gradient accent aesthetic
-- Interactive elements have clear hover/focus differentiation (lift, shadow, color shift)
-- Buttons have active:scale-[0.98] for tactile feedback
-
-**Touch Targets:**
-- Minimum 44px height on all interactive elements
-- Buttons use h-12 (48px) to h-14 (56px) for primary CTAs
-- Adequate spacing between tap targets (gap-4 minimum)
-
-**Motion:**
-- Respect prefers-reduced-motion for continuous animations
-- Entrance animations are subtle enough to not cause issues (0.7s duration, 28px vertical movement)
-- No flashing or rapid movements
-- Continuous animations are slow and gentle (4-5s duration, ±10px movement)
-
----
-
-## Implementation Notes
-
-**Component Structure:**
-All components (Button, Card, Input) are built locally using cva and tailwind-merge, following Shadcn API patterns but tailored to this design system.
-
-**CSS Custom Properties:**
-The StyleWrapper component injects all design tokens as CSS custom properties, allowing for consistent theming across all components.
-
-**Font Loading:**
-Fonts are loaded via Google Fonts:
-- Inter: weights 400, 500, 600, 700
-- Calistoga: default weight
-- JetBrains Mono: weights 400, 500
-
-**Animation Library:**
-Framer Motion is used for all entrance animations and continuous motion. Viewport options are set to { once: true, amount: 0.15, margin: "-60px" } for optimal performance and timing.
-</design-system>
-	
-# 待排版的文字`,
-	},
-	{
 		id: 'retro',
 		name: '复古',
 		description: '丑陋却酷炫的 90 年代怀旧美学',
@@ -2124,74 +1991,207 @@ Embrace the cheese. Celebrate the chaos. Welcome to 1997.
 </design-system>`,
 	},
 	{
-		id: 'comic',
-		name: '漫画风格',
-		description: '经典美式漫画风格，采用分格布局、动作线条和对话气泡',
+		id: 'playful-geometric',
+		name: '趣味几何',
+		description: '一种充满活力、能量十足的美学风格，将稳定的结构网格与奇特的几何装饰相结合',
 		fixedPromptId: 'byPrompt',
-		prompt: `你是一位精通漫画书视觉语言的UI设计师，深受杰克·科比、斯坦·李时代漫威和DC漫画的影响。
+		prompt: `<design-system>
+# Playful Geometric Design System
 
-**设计特点**：
-漫画书风格强调动态、戏剧性和叙事感，通过分格、动作线和夸张的视觉效果讲述故事。
+## Design Philosophy
 
-**色彩体系**：
-- CMYK印刷色：鲜艳的红、蓝、黄、绿
-- 主色：漫画红(#E23636)、英雄蓝(#1E90FF)、警示黄(#FFD700)
-- 背景：纸张白(#FFFEF0)或深灰(#2C2C2C)
-- 轮廓：纯黑(#000000)，粗边框
+**Playful Geometric** is the antidote to sterile, corporate minimalism. It creates an emotional connection through **optimism, clarity, and tactile fun**.
 
-**分格布局**：
-- 不规则分格：倾斜、不与文字重叠、破框
-- 动态构图：对角线、透视夸张
-- 留白控制叙事节奏
-- 关键时刻使用大分格或跨页
+The core concept is **"Stable Grid, Wild Decoration"**. The content itself (text, forms) lives in clean, readable areas, but the world around it is alive with movement and shape. It references the **Memphis Group** (80s) but cleans it up for modern digital screens—removing the chaos while keeping the energy.
 
-**视觉元素**：
-- 粗黑轮廓线：2-4px的实心边框
-- 动作线：放射状速度线表示运动
-- 对话气泡：带尾巴的云朵状或椭圆形
-- 思考气泡：小圆点连接的云形
-- 音效文字：BOOM! POW! CRASH! 风格化字母
-- 半色调点阵：阴影和过渡区域
-- 爆炸图形：锯齿状星形
+### The Vibe
+**Friendly. Tactile. Pop. Energetic.**
+It feels like a playground or a well-organized sticker book. It invites clicking. It smiles at you.
 
-**排版**：
-- 漫画字体：手绘风格的大写字母
-- 音效字体：粗体、倾斜、有阴影
-- 标题文字：立体效果、多层阴影
-- 对话文字：清晰易读
+### Visual Signatures
+- **Primitive Shapes**: Circles, triangles, squares, pill shapes, and squiggles used as background elements, masks, or icons.
+- **Hard Shadows**: Elements often have a hard, offset drop shadow (no blur) giving a sticker or cut-out paper feel.
+- **Pattern Fills**: Polka dots, grid lines, and diagonal stripes used to fill shapes or backgrounds.
+- **Varied Radii**: Mixing fully rounded corners with sharp ones to create "leaf" shapes or asymmetric blobs.
 
-**效果技巧**：
-- CSS clip-path创建不规则分格
-- transform: skew()制造动态感
-- 重复圆点背景模拟印刷效果
-- text-shadow堆叠创造立体字
+---
 
-**交互反馈**：
-- 分格翻转或缩放动画
-- 元素从画框外飞入
-- 点击时出现爆炸效果
-- 悬停时动作线动画
+## Design Token System
 
-**氛围**：
-漫画书风格传达活力、冒险和英雄主义。它适合娱乐产品、游戏平台、年轻品牌和任何需要充满能量的视觉表达的产品。让用户感觉自己是故事的一部分，正在经历一场冒险。`,
-	},
-	{
-		id: 'utility-first',
-		name: '实用优先',
-		description: '功能优先的哲学风格，最小化自订CSS并聚焦功能构图',
-		fixedPromptId: 'byPrompt',
-		prompt: `
-		角色设定：你是「实用主义/Utility-first」设计师，强调结构清晰、类名/原子化规则与易维护性，弱化装饰。
+### Colors (Light Mode)
+A punchy, high-saturation palette anchored by strong neutrals.
 
-场景定位：设计系统样例、后台工具、文档/组件库示例。用户期待干净的网格、明确层级与少量点缀色。
 
-视觉设计理念：以网格/间距为先，颜色限制在中性色 + 1–2 个品牌色；字体、间距、边框、圆角有明确刻度；
+background:        #FFFDF5    // Warm Cream/Off-White (Paper feel)
+foreground:        #1E293B    // Slate 800 (Softer than black)
+muted:             #F1F5F9    // Slate 100
+mutedForeground:   #64748B    // Slate 500
+accent:            #8B5CF6    // Vivid Violet (Primary Brand)
+accentForeground:  #FFFFFF    // White
+secondary:         #F472B6    // Hot Pink (Playful pop)
+tertiary:          #FBBF24    // Amber/Yellow (Optimism)
+quaternary:        #34D399    // Emerald/Mint (Freshness)
+border:            #E2E8F0    // Slate 200
+input:             #FFFFFF    // White
+card:              #FFFFFF    // White
+ring:              #8B5CF6    // Violet Focus
 
-材质与质感：纯色块、细分隔线、浅阴影（如 0 2px 8px 10%）；避免过度渐变与纹理。图标保持线性，对齐网格。
 
-整体氛围：理性、工程化、易复用。画面像设计系统示例板，干净且一致。
+**Usage Rule**: Use accent for primary actions. Use secondary, tertiary, and quaternary rotationally for decorative shapes, icons, or emphasized words to create a "confetti" effect.
 
----`,
+### Typography
+
+**Headings**: "Outfit", system-ui, sans-serif
+- A geometric sans with character. Rounded corners on letters make it friendly.
+- **Weights**: Bold (700) or ExtraBold (800).
+
+**Body**: "Plus Jakarta Sans", system-ui, sans-serif
+- Highly legible, modern, geometric but humanist.
+- **Weights**: Regular (400), Medium (500).
+
+**Scale Ratio**: 1.25 (Major Third) - melodic and harmonious.
+
+### Radius & Border
+
+
+radius-sm:   8px
+radius-md:   16px
+radius-lg:   24px
+radius-full: 9999px
+border-width: 2px     // Chunky borders by default
+
+
+**Special "Blob" Radius**: rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-none (Speech bubble style) or rounded-t-full rounded-b-none (Arch).
+
+### Shadows & Effects
+
+**The "Pop" Shadow (Hard Shadow)**:
+
+box-shadow: 4px 4px 0px 0px #1E293B;  // Dark hard shadow
+box-shadow-hover: 6px 6px 0px 0px #1E293B; // Lift effect
+box-shadow-active: 2px 2px 0px 0px #1E293B; // Press effect
+
+No blur. Solid offset colors.
+
+### Textures & Patterns
+- **Dot Grid**: A background of small dots (bg-[url(...)]) in strict formation.
+- **Squiggles**: SVG paths used as section dividers or underlining for headings.
+- **Confetti**: Small SVG shapes (triangles, circles) absolutely positioned behind main content blocks.
+
+---
+
+## Component Stylings
+
+### Buttons
+
+**Primary Button ("The Candy Button")**:
+
+- Bg: accent (#8B5CF6)
+- Text: white, font-weight: 700
+- Radius: rounded-full (Pill)
+- Border: 2px solid #1E293B (Dark border around color)
+- Shadow: 4px 4px 0px #1E293B (Hard shadow)
+- Hover: translate-x-[-2px] translate-y-[-2px], shadow extends to 6px 6px
+- Active: translate-x-[2px] translate-y-[2px], shadow shrinks to 2px 2px
+- Icon: ArrowRight, circular background (white) inside button
+
+
+**Secondary Button**:
+
+- Bg: transparent
+- Text: foreground
+- Border: 2px solid #1E293B
+- Radius: rounded-full
+- Shadow: none
+- Hover: bg-tertiary (#FBBF24) - Fills with yellow on hover
+
+
+### Cards
+
+**The "Sticker" Card**:
+
+- Bg: white
+- Border: 2px solid #1E293B
+- Radius: rounded-xl
+- Shadow: 8px 8px 0px #E2E8F0 (Soft hard shadow) or #F472B6 (Pink shadow for featured)
+- Hover: Rotate -1deg, Scale 1.02 (Wiggle effect)
+- Title: Bold Outfit font
+- Icon: Floating circle div with centered icon, sitting half-in/half-out of the top border.
+
+
+### Inputs
+
+
+- Bg: white
+- Border: 2px solid #CBD5E1
+- Radius: rounded-lg
+- Text: foreground
+- Shadow: 4px 4px 0px transparent (hidden initially)
+- Focus: Border accent, Shadow 4px 4px 0px accent (Hard color shadow on focus)
+- Label: Bold, uppercase, small tracking-wide.
+
+
+---
+
+## Layout Strategy
+
+### General
+- **Container**: max-w-6xl (Generous width).
+- **Spacing**: py-24 (96px). Spacious but not empty; filled with patterns.
+- **Grid**: 12-column logic, but grouped into big blocks (6/6 or 4/4/4).
+
+### Unique Section Layouts
+1.  **Hero**:
+    - Text left, Image right.
+    - **Decoration**: A massive yellow circle behind the text. A dotted pattern behind the image. The image itself has a "blob" mask (CSS clip-path or border-radius manipulation).
+2.  **Features**:
+    - Grid of 3.
+    - **Decoration**: Each card is connected by a dashed SVG line drawn in the background.
+    - Alternating colors for card headers (Violet, Pink, Yellow).
+3.  **Pricing**:
+    - The middle card is scaled up (1.1) and has a massive yellow star badge "MOST POPULAR" rotated 15deg.
+
+---
+
+## Effects & Animation
+
+**Feel**: Bouncy, Elastic, Fun.
+
+- **Hover**: transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] (Overshoot/Bounciness).
+- **Entrance**: Elements shouldn't just fade in; they should **pop** in (Scale 0->1 with bounce).
+- **Marquee**: Use infinite scrolling text for client logos or keywords.
+- **Wiggle**: Keyframe animation rotate: 0deg -> 3deg -> -3deg -> 0deg on hover for icons.
+
+---
+
+## Iconography
+
+**Lucide React** settings:
+- **Stroke Width**: 2.5px (Bold/Chunky).
+- **Style**: Round line caps, round line joins.
+- **Color**: Often white inside a colored circle, or the dark foreground color.
+- **Usage**: Enclosed in shapes. Never floating alone. A "Check" icon isn't just a check; it's a check inside a green circle.
+
+---
+
+## Responsive Strategy
+
+- **Mobile**:
+  - Stack everything.
+  - Reduce "pop" shadows to 2px to save space.
+  - Turn horizontal squiggle lines into vertical dividers.
+  - Keep buttons big and tappable (min 48px height).
+  - Hide complex background floating shapes that might overlap text.
+
+---
+
+## Accessibility & Best Practices
+
+- **Contrast**: The text is slate-800 on off-white/white, which is AAA.
+- **Color**: Never rely *only* on color. Use shapes and text labels.
+- **Motion**: Respect prefers-reduced-motion. Disable the "bounce" and "wiggle" effects if preferred.
+- **Focus**: The focus state is high-contrast (thick colored border + hard shadow).
+</design-system>`,
 	},
 	{
 		id: 'anti-design-studio',
