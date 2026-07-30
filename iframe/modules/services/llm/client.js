@@ -189,6 +189,11 @@ export async function generate({ baseUrl, apiKey, model, systemPrompt, userInput
 		if (buffer.trim()) parseSseEvent(buffer, onChunk);
 	} catch (e) {
 		if (e.name === 'AbortError') {
+			// 外部主动 abort（用户点停止 / 取消旧请求）—— 原样上抛，让调用方区分
+			if (signal && signal.aborted) {
+				throw e;
+			}
+			// 内部超时 abort
 			throw new Error(`请求超时（${GENERATE_TIMEOUT_MS / 1000}s）`);
 		}
 		if (e instanceof TypeError) {

@@ -8,8 +8,8 @@
  *   4. 初始化固定提示词编辑器
  *   5. 初始化配置面板
  *   6. 初始化输入面板（绑定字数统计）
- *   7. 初始化输出面板（绑定"复制""重新生成"）
- *   8. 绑定"生成"主按钮：拼接提示词 → 调用 LLM → 渲染结果
+ *   7. 初始化输出面板（绑定"复制"）
+ *   8. 绑定"生成"主按钮：拼接提示词 → 调用 LLM → 渲染结果（生成中按钮切换为"停止"）
  */
 // 注意：这里使用相对路径 import —— esbuild 在打包时会把所有模块合并到
 // iframe/dist/bundle.js（IIFE 格式），最终以普通 <script> 加载，所以运行时
@@ -112,15 +112,43 @@ function $(id) {
 		preId: 'output',
 		statusId: 'result-status',
 		copyBtnId: 'btn-copy',
-		regenBtnId: 'btn-regenerate',
 	});
 	output.onCopy(() => toast('已复制', 'success'));
-	output.setRegenHandler(runGenerate);
 
-	// 8) 主按钮
-	$('btn-generate').addEventListener('click', runGenerate);
+	// 闭包：当前请求的"在飞"状态与控制器（先声明，避免 click handler 内 TDZ 语义模糊）
+	let isGenerating = false;
+	let activeController = null;
+
+	// 8) 主按钮：根据当前状态分发（生成 / 停止）
+	const genBtn = $('btn-generate');
+	genBtn.addEventListener('click', () => {
+		if (isGenerating) {
+			// 主动停止 —— 触发 AbortController，client.js 会把 AbortError 原样上抛
+			if (activeController) activeController.abort();
+			return;
+		}
+		runGenerate();
+	});
+
+	// 按钮态切换：'idle' → 「生成」红底；'stopping' → 「停止」黄底
+	function setGenerateButtonMode(mode) {
+		if (mode === 'stopping') {
+			genBtn.textContent = '停止';
+			genBtn.classList.remove('btn--primary');
+			genBtn.classList.add('btn--yellow');
+			genBtn.disabled = false; // 停止按钮必须可点
+		} else {
+			genBtn.textContent = '生成';
+			genBtn.classList.remove('btn--yellow');
+			genBtn.classList.add('btn--primary');
+			genBtn.disabled = false;
+		}
+	}
 
 	async function runGenerate() {
+		// ★ 并发守卫：生成中再次触发（含 Ctrl/⌘+Enter）直接吞掉
+		if (isGenerating) return;
+
 		// 每次重新从输入框读取最新配置（用户在折叠面板里改过未提交也可能）
 		const latest = configPanel.getConfig();
 		if (!latest.baseUrl || !latest.apiKey || !latest.model) {
@@ -149,8 +177,12 @@ function $(id) {
 
 		const systemPrompt = buildSystemPrompt(theme, fixedPrompts, config.fixedPromptOverrides);
 
+		const controller = new AbortController();
+		activeController = controller;
+		isGenerating = true;
+		setGenerateButtonMode('stopping');
 		output.setLoading();
-		$('btn-generate').disabled = true;
+
 		try {
 			await generate(
 				{
@@ -162,16 +194,25 @@ function $(id) {
 				},
 				{
 					onChunk: (chunk) => output.appendChunk(chunk),
+					signal: controller.signal,
 				},
 			);
 			output.finishStreaming();
 			toast('生成成功', 'success');
 		} catch (e) {
-			const msg = e?.message || String(e);
-			output.setError(msg);
-			toast(`生成失败：${msg}`, 'error');
+			// ★ 用户主动停止 —— client.js 在外部 signal aborted 时原样上抛 AbortError
+			if (e?.name === 'AbortError' && activeController?.signal.aborted) {
+				output.setStopped();
+				toast('已停止', 'info');
+			} else {
+				const msg = e?.message || String(e);
+				output.setError(msg);
+				toast(`生成失败：${msg}`, 'error');
+			}
 		} finally {
-			$('btn-generate').disabled = false;
+			isGenerating = false;
+			activeController = null;
+			setGenerateButtonMode('idle');
 		}
 	}
 })();

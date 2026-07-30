@@ -82,23 +82,22 @@ function normalizeTagWhitespace(tagContent) {
 }
 
 /**
- * @param {Object} refs  { preId, statusId, copyBtnId, regenBtnId }
+ * @param {Object} refs  { preId, statusId, copyBtnId }
  * @returns {{
  *   setLoading: () => void,
  *   appendChunk: (chunk: string) => void,
  *   finishStreaming: () => void,
+ *   setStopped: () => void,
  *   setResult: (text: string) => void,
  *   setError: (msg: string) => void,
  *   onCopy: (cb: () => void) => void,
- *   setRegenHandler: (fn: () => void) => void,
  *   getLastText: () => string
  * }}
  */
-export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
+export function initOutputPanel({ preId, statusId, copyBtnId }) {
 	const container = $(preId); // 注意：HTML 上 id="output"，是 <div>
 	const status = $(statusId);
 	const copyBtn = $(copyBtnId);
-	const regenBtn = $(regenBtnId);
 
 	// ========== 状态机 / 渲染 ==========
 	let lastText = ''; // ★ 复制源（已剔除 think）
@@ -369,7 +368,6 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		container.classList.remove('is-error');
 		status.textContent = '生成中';
 		copyBtn.disabled = true;
-		regenBtn.disabled = true;
 	}
 
 	function appendChunk(chunk) {
@@ -413,7 +411,6 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		container.classList.remove('is-loading', 'is-error');
 		status.textContent = `完成 · ${lastText.length.toLocaleString()} 字`;
 		copyBtn.disabled = !lastText;
-		regenBtn.disabled = false;
 	}
 
 	function setResult(text) {
@@ -447,7 +444,6 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		container.classList.remove('is-loading');
 		status.textContent = '失败';
 		copyBtn.disabled = !lastText;
-		regenBtn.disabled = false;
 		// 在末尾追加错误信息（仍走 textContent 安全）
 		const span = document.createElement('span');
 		span.className = 'output__text';
@@ -483,8 +479,37 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		copyCb = cb;
 	}
 
-	function setRegenHandler(fn) {
-		regenBtn.addEventListener('click', fn);
+	function setStopped() {
+		// 兜底：丢弃残留半截/挂起围栏缓冲
+		fenceHeadBuf = '';
+		fenceHeadDone = true;
+		fenceTailBuf = '';
+		// 兜底：若仍在 IN_THINK 状态，标记中断
+		if (state === 'IN_THINK') {
+			stopThinkTimer(true);
+		}
+		// 兜底：把流末尾残留的未闭合 HTML 标签起始原样追加
+		if (pendingTag) {
+			lastText += pendingTag;
+			const span = document.createElement('span');
+			span.className = 'output__text';
+			span.textContent = pendingTag;
+			container.appendChild(span);
+			pendingTag = '';
+		}
+		streaming = false;
+		// 兜底：删「生成中…」占位（如果从未收到任何 OUT 内容）
+		if (loadingSpan) {
+			loadingSpan.remove();
+			loadingSpan = null;
+		}
+		if (!lastText && container.firstChild?.classList?.contains('output__text') && container.firstChild.textContent === '生成中…') {
+			clearContainer();
+		}
+		// ★ 关键：不加 is-error，沿用正常背景；只去掉 loading 态
+		container.classList.remove('is-loading', 'is-error');
+		status.textContent = `已停止 · ${lastText.length.toLocaleString()} 字`;
+		copyBtn.disabled = !lastText;
 	}
 
 	function getLastText() {
@@ -495,10 +520,10 @@ export function initOutputPanel({ preId, statusId, copyBtnId, regenBtnId }) {
 		setLoading,
 		appendChunk,
 		finishStreaming,
+		setStopped,
 		setResult,
 		setError,
 		onCopy,
-		setRegenHandler,
 		getLastText,
 	};
 }
