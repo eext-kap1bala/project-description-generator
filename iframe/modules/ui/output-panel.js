@@ -120,6 +120,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 	let thinkTimer = null; // setInterval 句柄
 	let currentThinkSummary = null; // 当前 think 段 summary 按钮引用
 	let currentThinkAborted = false; // 当前 think 段是否被中断（finishStreaming / setError 兜底触发）
+	let thinkEnded = false; // 当前 think 段是否已结束（正常或被中断）
+	let finalThinkDurationMs = 0; // 结束时锁定的耗时（ms），结束态文案复用，不再读 performance.now()
 
 	// 占位文本「生成中…」的引用，便于收到首个真实 chunk 时立即移除
 	let loadingSpan = null;
@@ -136,6 +138,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		thinkStartTime = null;
 		currentThinkSummary = null;
 		currentThinkAborted = false;
+		thinkEnded = false;
+		finalThinkDurationMs = 0;
 		// 重置围栏剥离状态
 		fenceHeadBuf = '';
 		fenceHeadDone = false;
@@ -150,10 +154,16 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 
 	// ========== 思考计时 ==========
 	function updateThinkLabel() {
-		if (!thinkStartTime || !currentThinkSummary) return;
-		const ms = performance.now() - thinkStartTime;
-		const suffix = currentThinkAborted ? ' · 已中断' : '';
-		currentThinkSummary.textContent = `思考中... (${formatThinkDuration(ms)})${suffix}`;
+		if (!currentThinkSummary) return;
+		let prefix;
+		if (thinkEnded) {
+			prefix = currentThinkAborted ? '思考已中断' : '思考完成';
+		} else {
+			prefix = '思考中...';
+		}
+		const suffix = !thinkEnded && currentThinkAborted ? ' · 已中断' : '';
+		const ms = thinkEnded ? finalThinkDurationMs : thinkStartTime ? performance.now() - thinkStartTime : 0;
+		currentThinkSummary.textContent = `${prefix} (${formatThinkDuration(ms)})${suffix}`;
 	}
 
 	function startThinkTimer(summaryBtn) {
@@ -163,6 +173,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 			thinkTimer = null;
 		}
 		thinkStartTime = performance.now();
+		finalThinkDurationMs = 0;
+		thinkEnded = false;
 		currentThinkSummary = summaryBtn;
 		currentThinkAborted = false;
 		updateThinkLabel();
@@ -176,7 +188,9 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		}
 		if (thinkStartTime && currentThinkSummary) {
 			currentThinkAborted = !!aborted;
-			updateThinkLabel(); // 最终一次更新（确保最后一帧到位）
+			finalThinkDurationMs = performance.now() - thinkStartTime;
+			thinkEnded = true;
+			updateThinkLabel(); // 最终一次更新（确保最后一帧到位，呈现「思考完成 / 思考已中断」）
 		}
 		thinkStartTime = null;
 		currentThinkSummary = null;
