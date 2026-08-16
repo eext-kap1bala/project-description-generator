@@ -32,7 +32,7 @@
 				"menuItems": [
 					{
 						"id": "OpenGenerator",
-						"title": "打开项目描述生成器",
+						"title": "打开",
 						"registerFn": "openGenerator"
 					}
 				]
@@ -45,7 +45,7 @@
 				"menuItems": [
 					{
 						"id": "OpenGenerator",
-						"title": "打开项目描述生成器",
+						"title": "打开",
 						"registerFn": "openGenerator"
 					}
 				]
@@ -58,7 +58,7 @@
 				"menuItems": [
 					{
 						"id": "OpenGenerator",
-						"title": "打开项目描述生成器",
+						"title": "打开",
 						"registerFn": "openGenerator"
 					}
 				]
