@@ -126,6 +126,33 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 	// 占位文本「生成中…」的引用，便于收到首个真实 chunk 时立即移除
 	let loadingSpan = null;
 
+	// 贴底滚动：默认跟随新内容；用户上滚时冻结，回到底部阈值内恢复
+	let stickToBottom = true;
+	let scrollRafId = 0;
+	const STICK_THRESHOLD_PX = 32; // 距底 ≤ 此值视为"已在底部"
+
+	function scrollToBottomNow() {
+		// 同步赋值，不用 behavior:'smooth' —— 流式高频追加下 smooth 动画队列会堆积，
+		// 反而跟不上渲染节奏、出现回拉。直接跳到位与 ChatGPT 早期版一致，最稳。
+		container.scrollTop = container.scrollHeight;
+	}
+
+	function scheduleScrollToBottom() {
+		if (scrollRafId || !stickToBottom) return;
+		scrollRafId = requestAnimationFrame(() => {
+			scrollRafId = 0;
+			scrollToBottomNow();
+		});
+	}
+
+	function resetStickToBottom() {
+		if (scrollRafId) {
+			cancelAnimationFrame(scrollRafId);
+			scrollRafId = 0;
+		}
+		stickToBottom = true;
+	}
+
 	function clearContainer() {
 		while (container.firstChild) container.removeChild(container.firstChild);
 		currentThinkBody = null;
@@ -144,6 +171,8 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		fenceHeadBuf = '';
 		fenceHeadDone = false;
 		fenceTailBuf = '';
+		// 贴底滚动重置（新内容天然从底展示）
+		resetStickToBottom();
 	}
 
 	function updateStatus() {
@@ -285,6 +314,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		span.className = 'output__text';
 		span.textContent = out;
 		container.appendChild(span);
+		scheduleScrollToBottom();
 		updateStatus();
 	}
 
@@ -307,10 +337,14 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 			block.append(btn, body);
 			container.appendChild(block);
 			currentThinkBody = body;
+			scheduleScrollToBottom(); // 新建 think 块 → 跟随展开
 			// ★ 启动思考计时
 			startThinkTimer(btn);
 		}
-		if (s) currentThinkBody.textContent += s;
+		if (s) {
+			currentThinkBody.textContent += s;
+			scheduleScrollToBottom(); // 思考体文本增长 → 跟随
+		}
 	}
 
 	/**
@@ -373,11 +407,14 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		pendingTag = '';
 		lastText = '';
 		streaming = true;
+		// 新一轮：保证从底部开始展示（即使之前用户停在中间位置）
+		stickToBottom = true;
 		// 占位文本（避免空白闪烁）
 		loadingSpan = document.createElement('span');
 		loadingSpan.className = 'output__text';
 		loadingSpan.textContent = '生成中…';
 		container.appendChild(loadingSpan);
+		scheduleScrollToBottom();
 		container.classList.add('is-loading');
 		container.classList.remove('is-error');
 		status.textContent = '生成中';
@@ -425,6 +462,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		container.classList.remove('is-loading', 'is-error');
 		status.textContent = `完成 · ${lastText.length.toLocaleString()} 字`;
 		copyBtn.disabled = !lastText;
+		scheduleScrollToBottom(); // 流结束后把残留追加跟随到位
 	}
 
 	function setResult(text) {
@@ -435,6 +473,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		pendingTag = '';
 		lastText = '';
 		streaming = false;
+		stickToBottom = true; // 完整字符串路径：保证一次性结果从底部展示
 		container.classList.remove('is-loading', 'is-error');
 		if (text) processChunk(text);
 		finishStreaming();
@@ -464,6 +503,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		span.style.color = 'var(--error)';
 		span.textContent = `× ${msg}`;
 		container.appendChild(span);
+		scheduleScrollToBottom(); // 错误信息追加 → 跟随到底
 	}
 
 	copyBtn.addEventListener('click', async () => {
@@ -487,6 +527,16 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 			}
 		}
 		if (copyCb) copyCb();
+	});
+
+	// 滚动监听：用户主动滚到非底部 → 冻结自动滚动；回到底部阈值内 → 恢复跟随
+	container.addEventListener('scroll', () => {
+		const distFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+		if (distFromBottom <= STICK_THRESHOLD_PX) {
+			if (!stickToBottom) stickToBottom = true; // 回到底部 → 重新跟随
+		} else {
+			if (stickToBottom) stickToBottom = false; // 离开底部 → 冻结
+		}
 	});
 
 	function onCopy(cb) {
@@ -524,6 +574,7 @@ export function initOutputPanel({ preId, statusId, copyBtnId }) {
 		container.classList.remove('is-loading', 'is-error');
 		status.textContent = `已停止 · ${lastText.length.toLocaleString()} 字`;
 		copyBtn.disabled = !lastText;
+		scheduleScrollToBottom(); // 停止后兜底追加 → 跟随
 	}
 
 	function getLastText() {
