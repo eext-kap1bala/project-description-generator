@@ -49,6 +49,18 @@ export function initConfigPanel(config, providers, onConfigChange) {
 	baseEl.value = config.baseUrl || '';
 	keyEl.value = config.apiKey || '';
 	modelEl.value = config.model || '';
+
+	// 兜底同步：与 change handler 行为对齐。
+	// 若用户已手敲过 baseUrl/model（任意一项有值且与该 provider 的预设值不一致），
+	// 视为"自定义"，绝不覆盖。仅当输入框为空时，用 provider 的预设值回填。
+	{
+		const p = providers.find((x) => x.id === providerEl.value);
+		if (p) {
+			if (!baseEl.value) baseEl.value = p.baseUrl || '';
+			if (!modelEl.value) modelEl.value = p.defaultModel || '';
+		}
+	}
+
 	refreshSummary();
 
 	function refreshSummary() {
@@ -57,7 +69,7 @@ export function initConfigPanel(config, providers, onConfigChange) {
 			summaryEl.textContent = '未配置';
 			return;
 		}
-		summaryEl.textContent = config.apiKey ? `已配置 · ${config.model}` : '未配置';
+		summaryEl.textContent = config.apiKey ? `已配置 · ${config.model}` : `待 API Key · ${config.model}`;
 	}
 
 	function setStatus(state, text) {

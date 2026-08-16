@@ -8,9 +8,9 @@
 export const STORAGE_KEY = 'pdg:config:v1';
 
 export const DEFAULTS = Object.freeze({
-	baseUrl: 'https://api.openai.com/v1',
+	baseUrl: 'https://api.deepseek.com',
 	apiKey: '',
-	model: 'gpt-4o-mini',
+	model: 'deepseek-v4-pro', // 与 PROVIDERS['deepseek'].defaultModel 对齐
 	lastThemeId: 'general',
 	fixedPromptOverrides: {}, // { [fixedPromptId]: string }
 	lastProviderId: 'deepseek', // 当前选中的 API 服务商预设 id
