@@ -2,7 +2,7 @@
 	"name": "project-description-generator",
 	"uuid": "93d95aa44be34857a490214b05c63c7f",
 	"displayName": "项目描述生成器",
-	"description": "在 EasyEDA Pro 中使用大语言模型为你的项目生成结构化描述",
+	"description": "调用大语言模型美化开源项目描述",
 	"version": "1.0.0",
 	"publisher": "卡皮巴拉",
 	"engines": {
